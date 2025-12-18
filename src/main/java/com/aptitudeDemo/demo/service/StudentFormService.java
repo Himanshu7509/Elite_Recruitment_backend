@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aptitudeDemo.demo.dto.student.EducationRecordDto;
-import com.aptitudeDemo.demo.dto.student.LanguageAbilityDto;
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
 import com.aptitudeDemo.demo.dto.student.WorkExperienceDto;
 import com.aptitudeDemo.demo.model.student.EducationRecord;
-import com.aptitudeDemo.demo.model.student.LanguageAbility;
 import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.model.student.WorkExperience;
 import com.aptitudeDemo.demo.repository.StudentFormRepository;
@@ -52,8 +50,10 @@ public class StudentFormService {
         studentForm.setReference2Name(studentFormRequest.getReference2Name());
         studentForm.setReference2Mobile(studentFormRequest.getReference2Mobile());
         
+        // Copy language
+        studentForm.setLanguage(studentFormRequest.getLanguage());
+        
         // Convert and copy nested objects
-        studentForm.setLanguages(convertLanguageAbilities(studentFormRequest.getLanguages()));
         studentForm.setAcademicRecords(convertEducationRecords(studentFormRequest.getAcademicRecords()));
         studentForm.setWorkExperiences(convertWorkExperiences(studentFormRequest.getWorkExperiences()));
         
@@ -61,23 +61,6 @@ public class StudentFormService {
         log.info("Successfully saved student form with ID: {}", savedForm.getId());
         
         return savedForm;
-    }
-    
-    private List<LanguageAbility> convertLanguageAbilities(List<LanguageAbilityDto> languageAbilityDtos) {
-        if (languageAbilityDtos == null) {
-            return new ArrayList<>();
-        }
-        
-        List<LanguageAbility> languageAbilities = new ArrayList<>();
-        for (LanguageAbilityDto dto : languageAbilityDtos) {
-            LanguageAbility languageAbility = new LanguageAbility();
-            languageAbility.setLanguage(dto.getLanguage());
-            languageAbility.setCanRead(dto.isCanRead());
-            languageAbility.setCanWrite(dto.isCanWrite());
-            languageAbility.setCanSpeak(dto.isCanSpeak());
-            languageAbilities.add(languageAbility);
-        }
-        return languageAbilities;
     }
     
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {

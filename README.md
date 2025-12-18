@@ -30,6 +30,8 @@ A Spring Boot application for managing aptitude tests and student information.
 ### Student Form
 - `POST /api/student-form/submit` - Submit student form
 
+**Note:** The student form structure has been simplified. The `languages` field (which was a list of language abilities with read/write/speak capabilities) has been replaced with a single `language` string field.
+
 ## Local Development
 
 ### Running with Docker

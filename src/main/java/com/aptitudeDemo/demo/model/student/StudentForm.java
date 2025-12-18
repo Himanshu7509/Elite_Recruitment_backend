@@ -25,8 +25,8 @@ public class StudentForm {
     private String sex;
     private String linkedInProfile; // Added LinkedIn profile field
 
-    // -------- LANGUAGES --------
-    private List<LanguageAbility> languages;
+    // -------- LANGUAGE --------
+    private String language;
 
     // -------- PERMANENT ADDRESS -------- (Removed communication address)
     private String permanentAddressLine;
