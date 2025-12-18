@@ -1,30 +1,28 @@
 # Multi-stage build for Spring Boot application
 
 # Stage 1: Build the application
-FROM openjdk:17-jdk-slim AS builder
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
-# Install Maven wrapper dependencies
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Install Maven
+RUN apk add --no-cache maven
 
 # Set working directory
 WORKDIR /app
 
 # Copy Maven files
-COPY mvnw .
-COPY .mvn .mvn
 COPY pom.xml .
 
 # Download dependencies
-RUN ./mvnw dependency:go-offline -B
+RUN mvn dependency:go-offline -B
 
 # Copy source code
-COPY src src
+COPY src ./src
 
 # Build the application
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Stage 2: Create the runtime image
-FROM openjdk:17-jre-slim
+FROM eclipse-temurin:17-jre-alpine
 
 # Set working directory
 WORKDIR /app
@@ -34,6 +32,10 @@ COPY --from=builder /app/target/aptitude-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port
 EXPOSE 8080
+
+# Environment variables (can be overridden at runtime)
+ENV MONGODB_URI=""
+ENV JWT_SECRET="defaultSecretKey123"
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
