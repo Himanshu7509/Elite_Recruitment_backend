@@ -36,7 +36,18 @@ public class JwtUtils {
     }
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        try {
+            // Try to decode as Base64 first
+            return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        } catch (Exception e) {
+            // If that fails, use the secret directly (must be at least 32 characters)
+            if (jwtSecret.length() < 32) {
+                // Generate a secure key if the provided one is too short
+                logger.warn("JWT secret is too short, generating a secure key");
+                return Keys.secretKeyFor(SignatureAlgorithm.HS256);
+            }
+            return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        }
     }
 
     public String getUserIdFromJwtToken(String token) {
