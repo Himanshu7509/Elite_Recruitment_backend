@@ -79,7 +79,7 @@ public class OpenAiService {
         %s
 
         -On the basis of candidate years of Experience generate 70 percent questions on Candidate Skills and 30 percent on the post he applied for.
-
+        -Always generate different questions from last api call.
         Output ONLY valid JSON array. No explanations. No markdown.
         """.formatted(
                 objectMapper.writeValueAsString(request.getCandidateProfile()),
