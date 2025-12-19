@@ -32,7 +32,6 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/student/**").permitAll()
-                        .requestMatchers("/api/student-form/**").permitAll()
                         .requestMatchers("/open/generate").permitAll()
                         .anyRequest().authenticated()
                 );
