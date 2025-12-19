@@ -61,26 +61,35 @@ public class OpenAiService {
         return """
         Generate exactly number of MCQ questions present in Test Requirement with the following rules:
         
-        - Each question must follow this JSON format:
-        [
-          {
-            "type": "MCQ",
-            "difficulty": "Easy|Medium|Hard",
-            "question": "Q[1-(total number of Questions in Test Requirement)]. ...",
-            "options": ["A","B","C","D"],
-            "correctAnswer": A-E
-          }
-        ]
+- Each question must follow this JSON format:
+[
+  {
+    "type": "MCQ",
+    "difficulty": "Easy|Medium|Hard",
+    "question": "Q[1-total number of Questions in Test Requirement]. ...",
+    "options": ["A","B","C","D"],
+    "correctAnswer": A-E
+  }
+]
 
-        Candidate Profile:
-        %s
+Candidate Profile:
+%s
 
-        Test Requirements:
-        %s
+Test Requirements:
+%s
 
-        -On the basis of candidate years of Experience generate 70 percent questions on Candidate Skills and 30 percent on the post he applied for.
-        -Always generate different questions from last api call.
-        Output ONLY valid JSON array. No explanations. No markdown.
+- On the basis of candidate years of experience, generate 70 percent questions on candidate skills and 30 percent on the applied position.
+
+- Ensure that the generated questions are globally unique across all candidates.
+- Do not repeat, paraphrase, or slightly modify any question that may have appeared in previous tests.
+- Even when testing the same concepts, use entirely different problem statements, scenarios, data sets, constraints, and real-world contexts.
+- Avoid reusing question structures, patterns, or examples from earlier tests.
+- Treat the question pool as cumulative and permanent; assume all previously generated questions must be avoided.
+- If there is any risk of similarity with prior questions, discard the idea and generate a different question.
+
+Output ONLY a valid JSON array.
+Do not include explanations, comments, or metadata.
+No markdown.
         """.formatted(
                 objectMapper.writeValueAsString(request.getCandidateProfile()),
                 objectMapper.writeValueAsString(request.getTestRequirements())
