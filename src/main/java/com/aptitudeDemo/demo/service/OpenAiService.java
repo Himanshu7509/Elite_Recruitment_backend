@@ -59,15 +59,14 @@ public class OpenAiService {
 
     private String buildUserPrompt(TestRequest request) throws Exception {
         return """
-        Generate exactly 30 MCQ questions with the following rules:
-
-        - 10 Easy, 10 Medium, 10 Hard
+        Generate exactly number of MCQ questions present in Test Requirement with the following rules:
+        
         - Each question must follow this JSON format:
         [
           {
             "type": "MCQ",
             "difficulty": "Easy|Medium|Hard",
-            "question": "Q[1-31]. ...",
+            "question": "Q[1-(total number of Questions in Test Requirement)]. ...",
             "options": ["A","B","C","D"],
             "correctAnswer": A-E
           }
@@ -78,6 +77,8 @@ public class OpenAiService {
 
         Test Requirements:
         %s
+
+        -On the basis of candidate years of Experience generate 70 percent questions on Candidate Skills and 30 percent on the post he applied for.
 
         Output ONLY valid JSON array. No explanations. No markdown.
         """.formatted(
