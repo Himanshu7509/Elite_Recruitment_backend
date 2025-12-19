@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/student/**").permitAll()
                         .requestMatchers("/api/student-form/**").permitAll()
+                        .requestMatchers("/open/generate").permitAll()
                         .anyRequest().authenticated()
                 );
 
