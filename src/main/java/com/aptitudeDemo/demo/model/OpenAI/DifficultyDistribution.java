@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class DifficultyDistribution {
-    private int easy = 33;
-    private int medium= 34;
-    private int hard = 33;
+    private int easy;
+    private int medium;
+    private int hard ;
 }

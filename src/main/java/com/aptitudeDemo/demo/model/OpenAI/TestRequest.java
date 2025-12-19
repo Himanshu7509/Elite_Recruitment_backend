@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class TestRequest {
     private CandidateProfile candidateProfile;
     private TestRequirements testRequirements;
-    private String outputFormat= "JSON";
+    private String outputFormat;
 }

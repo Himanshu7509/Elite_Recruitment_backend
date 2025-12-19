@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class TestRequirements {
-    private int totalQuestions= 30;
+    private int totalQuestions;
     private DifficultyDistribution difficultyDistribution;
-    private String questionTypes = "MCQ";
+    private String questionTypes;
 }
