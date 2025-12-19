@@ -32,6 +32,10 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/student/**").permitAll()
+<<<<<<< HEAD
+=======
+                        .requestMatchers("/open/generate").permitAll()
+>>>>>>> dc34a3df4125d2a018d878aa9ed77e26707c7640
                         .anyRequest().authenticated()
                 );
 
