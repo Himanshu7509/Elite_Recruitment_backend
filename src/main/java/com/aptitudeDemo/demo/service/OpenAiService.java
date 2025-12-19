@@ -62,13 +62,24 @@ public class OpenAiService {
         Generate exactly 30 MCQ questions with the following rules:
 
         - 10 Easy, 10 Medium, 10 Hard
-        - Output STRICT JSON array only
+        - Each question must follow this JSON format:
+        [
+          {
+            "type": "MCQ",
+            "difficulty": "Easy|Medium|Hard",
+            "question": "Q[1-31]. ...",
+            "options": ["A","B","C","D"],
+            "correctAnswer": A-E
+          }
+        ]
 
         Candidate Profile:
         %s
 
         Test Requirements:
         %s
+
+        Output ONLY valid JSON array. No explanations. No markdown.
         """.formatted(
                 objectMapper.writeValueAsString(request.getCandidateProfile()),
                 objectMapper.writeValueAsString(request.getTestRequirements())
