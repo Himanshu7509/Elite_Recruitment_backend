@@ -24,13 +24,15 @@ A Spring Boot application for managing aptitude tests and student information.
 
 ## Endpoints
 
-### Authentication
-- `POST /auth/student/signup` - User registration
-
 ### Student Form
 - `POST /api/student-form/submit` - Submit student form
 
 **Note:** The student form structure has been simplified. The `languages` field (which was a list of language abilities with read/write/speak capabilities) has been replaced with a single `language` string field.
+
+**Additional Fields Added:**
+- `primarySkills` (List<String>): List of primary technical skills of the candidate
+- `secondarySkills` (List<String>): List of secondary skills of the candidate
+- `yearsOfExperience` (Double): Years of professional experience (allows fractional years)
 
 ## Local Development
 
@@ -49,6 +51,63 @@ docker run -p 8080:8080 elite-aptitude-system
 ```bash
 # Run the application
 ./mvnw spring-boot:run
+```
+
+### Example Student Form Request
+
+**Method:** POST  
+**URL:** `/api/student-form/submit`
+
+**Headers:**
+- Content-Type: application/json
+
+**Body (JSON):**
+```json
+{
+  "fullName": "John Doe",
+  "fatherName": "Robert Doe",
+  "postAppliedFor": "Software Engineer",
+  "referenceName": "Jane Smith",
+  "dateOfBirth": "1995-05-15",
+  "age": 28,
+  "maritalStatus": "Single",
+  "sex": "Male",
+  "linkedInProfile": "https://linkedin.com/in/johndoe",
+  "language": "English, Spanish",
+  "primarySkills": ["Java", "Spring Boot", "MongoDB"],
+  "secondarySkills": ["React", "Docker", "AWS"],
+  "yearsOfExperience": 5.5,
+  "permanentAddressLine": "123 Main Street",
+  "permanentPin": "123456",
+  "permanentPhone": "+1-555-123-4567",
+  "permanentEmail": "john.doe@example.com",
+  "reference1Name": "Alice Johnson",
+  "reference1Mobile": "+1-555-987-6543",
+  "reference2Name": "Bob Wilson",
+  "reference2Mobile": "+1-555-456-7890",
+  "academicRecords": [
+    {
+      "schoolOrCollege": "ABC University",
+      "boardOrUniversity": "XYZ Board",
+      "examinationPassed": "Bachelor's Degree",
+      "yearOfPassing": "2020",
+      "mainSubjects": "Computer Science",
+      "percentage": 85.5
+    }
+  ],
+  "workExperiences": [
+    {
+      "employerName": "Tech Solutions Inc.",
+      "durationFrom": "2020-06-01",
+      "durationTo": "2023-05-31",
+      "designation": "Software Developer",
+      "briefJobProfile": "Developed web applications using Java and Spring Boot",
+      "totalSalary": 75000,
+      "joiningDate": "2020-06-01",
+      "lastDate": "2023-05-31"
+    }
+  ]
+}
 ```
 
 ### Running with Environment Variables

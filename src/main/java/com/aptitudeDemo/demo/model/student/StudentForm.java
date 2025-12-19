@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.aptitudeDemo.demo.dto.student.EducationRecordDto;
+import com.aptitudeDemo.demo.dto.student.WorkExperienceDto;
+
 import lombok.Data;
 
 @Data
@@ -17,32 +20,36 @@ public class StudentForm {
     // -------- PERSONAL DATA --------
     private String fullName;
     private String fatherName;
-    private String postAppliedFor;
-    private String referenceName;
     private String dateOfBirth;
     private int age;
     private String maritalStatus;
     private String sex;
-    private String linkedInProfile; // Added LinkedIn profile field
-
-    // -------- LANGUAGE --------
+    private String permanentPhone;
+    private String permanentEmail;
     private String language;
-
-    // -------- PERMANENT ADDRESS -------- (Removed communication address)
     private String permanentAddressLine;
     private String permanentPin;
-    private String permanentPhone;
-    private String permanentEmail; // Moved email to permanent address section
-
-    // -------- REFERENCES --------
     private String reference1Name;
     private String reference1Mobile;
     private String reference2Name;
     private String reference2Mobile;
+    private String referenceName;
 
     // -------- ACADEMIC RECORD --------
-    private List<EducationRecord> academicRecords;
+    private List<EducationRecordDto> academicRecords;
 
+
+    private String postAppliedFor;
+    private double yearsOfExperience;
+    private String experienceLevel;
     // -------- WORK EXPERIENCE --------
-    private List<WorkExperience> workExperiences;
+    private List<WorkExperienceDto> workExperiences;
+    
+    private String linkedInProfile; 
+    // -------- LANGUAGE --------
+    
+    
+    // -------- SKILLS AND EXPERIENCE --------
+    private List<String> primarySkills;
+    private List<String> secondarySkills;
 }

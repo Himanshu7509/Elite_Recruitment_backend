@@ -38,6 +38,11 @@ public class StudentFormService {
         studentForm.setSex(studentFormRequest.getSex());
         studentForm.setLinkedInProfile(studentFormRequest.getLinkedInProfile()); // Added LinkedIn profile
         
+        // Copy skills and experience information
+        studentForm.setPrimarySkills(studentFormRequest.getPrimarySkills());
+        studentForm.setSecondarySkills(studentFormRequest.getSecondarySkills());
+        studentForm.setYearsOfExperience(studentFormRequest.getYearsOfExperience());
+        
         // Copy permanent address information (removed communication address)
         studentForm.setPermanentAddressLine(studentFormRequest.getPermanentAddressLine());
         studentForm.setPermanentPin(studentFormRequest.getPermanentPin());
@@ -52,10 +57,6 @@ public class StudentFormService {
         
         // Copy language
         studentForm.setLanguage(studentFormRequest.getLanguage());
-        
-        // Convert and copy nested objects
-        studentForm.setAcademicRecords(convertEducationRecords(studentFormRequest.getAcademicRecords()));
-        studentForm.setWorkExperiences(convertWorkExperiences(studentFormRequest.getWorkExperiences()));
         
         StudentForm savedForm = studentFormRepository.save(studentForm);
         log.info("Successfully saved student form with ID: {}", savedForm.getId());

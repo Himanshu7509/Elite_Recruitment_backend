@@ -29,7 +29,6 @@ public class StudentFormController {
         
         try {
             StudentForm savedForm = studentFormService.saveStudentForm(studentFormRequest);
-            log.info("Successfully saved student form with ID: {}", savedForm.getId());
             return ResponseEntity.ok(savedForm);
         } catch (Exception e) {
             log.error("Error saving student form: ", e);
