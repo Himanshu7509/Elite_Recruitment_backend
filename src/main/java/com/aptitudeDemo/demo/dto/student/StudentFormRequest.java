@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.Data;
 
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class StudentFormRequest {
     // -------- PERSONAL DATA --------
     private String fullName;
