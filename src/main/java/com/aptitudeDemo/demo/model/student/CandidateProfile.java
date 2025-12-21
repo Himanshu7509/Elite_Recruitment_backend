@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CandidateProfile {
 
-   
+
     private String postAppliedFor;
     private String experienceLevel;
     private int yearsOfExperience;

@@ -42,5 +42,4 @@ public class StudentFormRequest {
     private int yearsOfExperience;
     private List<String> primarySkills;
     private List<String> secondarySkills;
-    }
 }
