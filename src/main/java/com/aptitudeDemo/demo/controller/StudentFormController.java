@@ -25,9 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/auth/student")
 public class StudentFormController {
 
-    private final OpenAiService openAiService;
-    
-
     @Autowired
     private OpenAiService openAiService;
 
@@ -41,11 +38,7 @@ public class StudentFormController {
     public ResponseEntity<?> submitStudentForm(@RequestBody StudentFormRequest studentFormRequest) {
         log.info("Received student form submission for: {}", studentFormRequest.getFullName());
 
-
-        
         try {
-
-
             StudentForm savedForm = studentFormService.saveStudentForm(studentFormRequest);
             log.info("Successfully saved student form with ID: {}", savedForm.getId());
             
