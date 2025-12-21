@@ -37,4 +37,9 @@ public class StudentFormRequest {
 
     // -------- WORK EXPERIENCE --------
     private List<WorkExperienceDto> workExperiences;
+
+    private String experienceLevel;
+    private int yearsOfExperience;
+    private List<String> primarySkills;
+    private List<String> secondarySkills;
 }

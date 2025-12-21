@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class CandidateProfile {
 
 
-    private String role;
+    private String postAppliedFor;
     private String experienceLevel;
     private int yearsOfExperience;
     private List<String> primarySkills;
