@@ -55,7 +55,8 @@ public class StudentFormController {
                         studentFormRequest.getSecondarySkills()
                     ),
                     new TestRequirements(
-                        30,
+                        15
+                        ,
                         new DifficultyDistribution(
                             33,
                             34,
