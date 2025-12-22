@@ -60,18 +60,38 @@ public class OpenAiService {
 
     private String buildUserPrompt(TestRequest request) throws Exception {
         return """
-        Generate exactly number of MCQ questions present in Test Requirement with the following rules:
-        
-- Each question must follow this JSON format:
+       You are required to generate a technical aptitude test.
+
+CRITICAL INSTRUCTION (DO NOT IGNORE):
+- The total number of questions is defined by TestRequirements.totalQuestions.
+- You MUST generate EXACTLY that many MCQ questions.
+- Generating fewer or more questions makes the response INVALID.
+
+PROCESS (MANDATORY):
+1. Read Test Requirements.
+2. Extract the value of TestRequirements.totalQuestions.
+3. Let this value be N.
+4. Generate EXACTLY N questions — no more, no less.
+
+Each question must follow this JSON format:
 [
   {
     "type": "MCQ",
     "difficulty": "Easy|Medium|Hard",
-    "question": "Q[1-total number of Questions in Test Requirement]. ...",
+    "question": "Q[1-N]. ...",
     "options": ["A","B","C","D"],
-    "correctAnswer": A-E
+    "correctAnswer": "A|B|C|D"
   }
 ]
+
+STRICT RULES:
+- Question numbering MUST start at Q1 and end at QN
+- No missing or extra question numbers are allowed
+- Do NOT shuffle questions
+- Order MUST be:
+  - All Easy questions first
+  - Then all Medium questions
+  - Then all Hard questions
 
 Candidate Profile:
 %s
@@ -79,18 +99,36 @@ Candidate Profile:
 Test Requirements:
 %s
 
-- On the basis of candidate years of experience, generate 70 percent questions of Total Questions on candidate skills and 30 percent of Total Questions on the applied position.
+CONTENT RULES:
+- Use TestRequirements.totalQuestions as the ONLY source of total count
+- Generate 70%% of N questions based on candidate skills
+- Generate 30%% of N questions based on the applied position
+- Questions must match the candidate’s experience level
+- Avoid generic or textbook-style questions
+- Use real-world, industry-relevant scenarios
 
-- Ensure that the generated questions are globally unique across all candidates.
-- Do not repeat, paraphrase, or slightly modify any question that may have appeared in previous tests.
-- Even when testing the same concepts, use entirely different problem statements, scenarios, data sets, constraints, and real-world contexts.
-- Avoid reusing question structures, patterns, or examples from earlier tests.
-- Treat the question pool as cumulative and permanent; assume all previously generated questions must be avoided.
-- If there is any risk of similarity with prior questions, discard the idea and generate a different question.
-- Don't Shuffle! Give Sequentially all Easy questions first then Medium and Hard.
-Output ONLY a valid JSON array.
-Do not include explanations, comments, or metadata.
-No markdown.
+UNIQUENESS RULES:
+- Ensure global uniqueness across all candidates
+- Do NOT reuse, paraphrase, or structurally imitate any previous question
+- Use entirely different scenarios, datasets, constraints, and contexts
+- Treat the question pool as cumulative and permanent
+- If any similarity risk exists, discard and generate a new question
+
+FAILURE CONDITIONS (ANY = INVALID RESPONSE):
+- Total questions ≠ TestRequirements.totalQuestions
+- Question numbering does not end at QN
+- Any question is missing required fields
+- Output is not a valid JSON array
+
+FINAL CHECK (MANDATORY):
+- Before responding, verify that the JSON array length equals N
+- Verify the last question is labeled QN
+
+OUTPUT RULES:
+- Output ONLY a valid JSON array
+- Do not include explanations, comments, or metadata
+- No markdown
+
         """.formatted(
                 objectMapper.writeValueAsString(request.getCandidateProfile()),
                 objectMapper.writeValueAsString(request.getTestRequirements())
