@@ -66,7 +66,7 @@ public class OpenAiService {
 [
   {
     "type": "MCQ",
-    "difficulty": "All Easy then all Medium and then all Hard",
+    "difficulty": "Easy|Medium|Hard",
     "question": "Q[1-total number of Questions in Test Requirement]. ...",
     "options": ["A","B","C","D"],
     "correctAnswer": A-E

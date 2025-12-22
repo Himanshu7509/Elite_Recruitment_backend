@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/auth/student")
 public class StudentFormController {
 
+    
+
     @Autowired
     private OpenAiService openAiService;
 
