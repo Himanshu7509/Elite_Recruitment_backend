@@ -2,6 +2,7 @@ package com.aptitudeDemo.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,23 @@ public class StudentFormService {
         log.info("Successfully saved student form with ID: {}", savedForm.getId());
         
         return savedForm;
+    }
+    
+    public List<StudentForm> getAllStudents() {
+        log.info("Fetching all student forms");
+        return studentFormRepository.findAll();
+    }
+    
+    public Optional<StudentForm> getStudentByName(String fullName) {
+        log.info("Fetching student form by name: {}", fullName);
+        // This uses MongoDB's built-in query method for exact match
+        return studentFormRepository.findByFullName(fullName);
+    }
+    
+    public List<StudentForm> getStudentsByNameContaining(String partialName) {
+        log.info("Fetching student forms containing name: {}", partialName);
+        // This uses MongoDB's regex query for partial match (case-insensitive)
+        return studentFormRepository.findByFullNameContainingIgnoreCase(partialName);
     }
     
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {

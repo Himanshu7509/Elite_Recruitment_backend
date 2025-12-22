@@ -44,7 +44,7 @@ public class OpenAiService {
                 "temperature", 0.4
         );
 
-        Map response = restClient.post()
+        Map      response = restClient.post()
                 .uri("/chat/completions")
                 .body(body)
                 .retrieve()
