@@ -79,7 +79,7 @@ Candidate Profile:
 Test Requirements:
 %s
 
-- On the basis of candidate years of experience, generate 70 percent questions on candidate skills and 30 percent on the applied position.
+- On the basis of candidate years of experience, generate 70 percent questions of Total Questions on candidate skills and 30 percent of Total Questions on the applied position.
 
 - Ensure that the generated questions are globally unique across all candidates.
 - Do not repeat, paraphrase, or slightly modify any question that may have appeared in previous tests.
@@ -87,7 +87,7 @@ Test Requirements:
 - Avoid reusing question structures, patterns, or examples from earlier tests.
 - Treat the question pool as cumulative and permanent; assume all previously generated questions must be avoided.
 - If there is any risk of similarity with prior questions, discard the idea and generate a different question.
-
+- Don't Shuffle! Give Sequentially all Easy questions first then Medium and Hard.
 Output ONLY a valid JSON array.
 Do not include explanations, comments, or metadata.
 No markdown.
