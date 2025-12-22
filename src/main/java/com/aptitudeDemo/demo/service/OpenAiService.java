@@ -67,7 +67,7 @@ public class OpenAiService {
   {
     "type": "MCQ",
     "difficulty": "Easy|Medium|Hard",
-    "question": "Q[1-30]. ...",
+    "question": "Q[1-15]. ...",
     "options": ["A","B","C","D"],
     "correctAnswer": A-E
   }
@@ -81,7 +81,7 @@ Test Requirements:
 
 
 STRICT RULES:
-- Question numbering MUST start at Q1 and end at Q30
+- Question numbering MUST start at Q1 and end at Q15
 - No missing or extra question numbers are allowed
 - Do NOT shuffle questions
 - Order MUST be:
