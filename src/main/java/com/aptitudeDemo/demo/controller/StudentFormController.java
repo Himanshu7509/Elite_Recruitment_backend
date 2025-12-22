@@ -1,8 +1,13 @@
 package com.aptitudeDemo.demo.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +41,31 @@ public class StudentFormController {
 
     
 
+    @GetMapping("/all")
+    public ResponseEntity<List<StudentForm>> getAllStudents() {
+        log.info("Received request to fetch all students");
+        List<StudentForm> students = studentFormService.getAllStudents();
+        return ResponseEntity.ok(students);
+    }
+    
+    @GetMapping("/name/{fullName}")
+    public ResponseEntity<?> getStudentByName(@PathVariable String fullName) {
+        log.info("Received request to fetch student by exact name: {}", fullName);
+        Optional<StudentForm> student = studentFormService.getStudentByName(fullName);
+        if (student.isPresent()) {
+            return ResponseEntity.ok(student.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/search/{partialName}")
+    public ResponseEntity<List<StudentForm>> getStudentsByNameContaining(@PathVariable String partialName) {
+        log.info("Received request to search students by partial name: {}", partialName);
+        List<StudentForm> students = studentFormService.getStudentsByNameContaining(partialName);
+        return ResponseEntity.ok(students);
+    }
+    
     @PostMapping("/submit")
     public ResponseEntity<?> submitStudentForm(@RequestBody StudentFormRequest studentFormRequest) {
         log.info("Received student form submission for: {}", studentFormRequest.getFullName());
