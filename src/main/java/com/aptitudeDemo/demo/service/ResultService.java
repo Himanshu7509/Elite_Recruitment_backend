@@ -23,7 +23,7 @@ public class ResultService {
         result.setCorrectAnswer(resultReq.getCorrectAnswer());
         return resultRepository.save(result);
     }
-`
+
     public int correctAnswerByName(String fullName) {
 
     return resultRepository
