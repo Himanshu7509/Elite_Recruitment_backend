@@ -43,7 +43,8 @@ public class WebSecurityConfig {
                     "/open/generate",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
-                    "/feedback/**"
+                    "/feedback/**",
+                    "/result/**"
                 ).permitAll()
 
                 // All other endpoints require authentication
