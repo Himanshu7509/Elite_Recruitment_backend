@@ -16,5 +16,5 @@ public class FeedbackReq{
     private String problem3;
     private String problem4;
     private String problem5;
-    private String problem6;
+   
 }
