@@ -24,7 +24,7 @@ public class FeedbackService {
         
         Feedback feedback = new Feedback();
         feedback.setName(feedbackReq.getName());
-
+        feedback.setRating(feedbackReq.getRating());
         feedback.setProblem1(feedbackReq.getProblem1());
         feedback.setProblem2(feedbackReq.getProblem2());
         feedback.setProblem3(feedbackReq.getProblem3());
