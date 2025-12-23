@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aptitudeDemo.demo.dto.student.DashboardDTO;
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
 import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
 import com.aptitudeDemo.demo.model.student.CandidateProfile;
 import com.aptitudeDemo.demo.model.student.StudentForm;
+import com.aptitudeDemo.demo.service.FeedbackService;
 import com.aptitudeDemo.demo.service.OpenAiService;
+import com.aptitudeDemo.demo.service.ResultService;
 import com.aptitudeDemo.demo.service.StudentFormService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +42,64 @@ public class StudentFormController {
     @Autowired
     private StudentFormService studentFormService;
 
+    @Autowired
+    private ResultService resultService;
+
+    @Autowired FeedbackService feedbackService;
+
     
 
     @GetMapping("/all")
-    public ResponseEntity<List<StudentForm>> getAllStudents() {
-        log.info("Received request to fetch all students");
-        List<StudentForm> students = studentFormService.getAllStudents();
-        return ResponseEntity.ok(students);
-    }
+public ResponseEntity<List<DashboardDTO>> getAllStudents() {
+
+    log.info("Received request to fetch all students");
+
+    // 1. Fetch all student forms
+    List<StudentForm> students = studentFormService.getAllStudents();
+
+    // 2. Convert to DashboardDTO
+    List<DashboardDTO> dashboardList = students.stream().map(student -> {
+
+        DashboardDTO dto = new DashboardDTO();
+
+        // -------- STUDENT FORM DATA --------
+        dto.setFullName(student.getFullName());
+        dto.setFatherName(student.getFatherName());
+        dto.setPostAppliedFor(student.getPostAppliedFor());
+        dto.setReferenceName(student.getReferenceName());
+        dto.setDateOfBirth(student.getDateOfBirth());
+        dto.setAge(student.getAge());
+        dto.setMaritalStatus(student.getMaritalStatus());
+        dto.setSex(student.getSex());
+        dto.setLinkedInProfile(student.getLinkedInProfile());
+        dto.setLanguage(student.getLanguage());
+
+        dto.setPermanentAddressLine(student.getPermanentAddressLine());
+        dto.setPermanentPin(student.getPermanentPin());
+        dto.setPermanentPhone(student.getPermanentPhone());
+        dto.setPermanentEmail(student.getPermanentEmail());
+
+        dto.setReference1Name(student.getReference1Name());
+        dto.setReference1Mobile(student.getReference1Mobile());
+        dto.setReference2Name(student.getReference2Name());
+        dto.setReference2Mobile(student.getReference2Mobile());
+
+        dto.setAcademicRecords(student.getAcademicRecords());
+        dto.setWorkExperiences(student.getWorkExperiences());
+
+        // -------- FEEDBACK DATA --------
+        int rating = feedbackService.findRatingByName(student.getFullName());
+        dto.setRating(rating);
+
+        // -------- RESULT DATA --------
+        int correctAnswer = resultService.correctAnswerByName(student.getFullName());
+        dto.setCorrectAnswer(correctAnswer);
+
+        return dto;
+    }).toList();
+
+    return ResponseEntity.ok(dashboardList);
+}
     
     @GetMapping("/name/{fullName}")
     public ResponseEntity<?> getStudentByName(@PathVariable String fullName) {

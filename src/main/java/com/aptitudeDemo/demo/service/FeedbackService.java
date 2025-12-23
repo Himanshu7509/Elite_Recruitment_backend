@@ -41,4 +41,14 @@ public class FeedbackService {
         log.info("Fetching all student forms");
         return feedbackRepository.findAll();
     }
+
+    public int findRatingByName(String fullName) {
+
+    return feedbackRepository
+            .findByName(fullName)
+            .map(Feedback::getRating)
+            .orElse(0);   // return 0 if feedback not found
+}
+
+
 }
