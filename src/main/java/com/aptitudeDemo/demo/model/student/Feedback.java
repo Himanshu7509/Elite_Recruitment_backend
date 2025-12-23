@@ -15,6 +15,7 @@ public class Feedback {
     private String id;
 
     private int rating;
+    private String name;
     private String problem1;
     private String problem2;
     private String problem3;

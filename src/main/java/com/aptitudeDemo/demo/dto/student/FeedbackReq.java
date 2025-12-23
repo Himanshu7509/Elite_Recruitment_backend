@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class FeedbackReq{
 
     private int rating;
+    private String name;
     private String problem1;
     private String problem2;
     private String problem3;
