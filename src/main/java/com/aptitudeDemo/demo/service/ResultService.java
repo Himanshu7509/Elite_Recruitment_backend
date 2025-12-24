@@ -1,5 +1,8 @@
 package com.aptitudeDemo.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,16 @@ public class ResultService {
             .map(Result::getCorrectAnswer)
             .orElse(0);   // return 0 if student not found
 }
+    
+    public List<Result> getAllResults() {
+        log.info("Fetching all results");
+        return resultRepository.findAll();
+    }
+    
+    public Optional<Result> getResultById(String id) {
+        log.info("Fetching result by ID: {}", id);
+        return resultRepository.findById(id);
+    }
 
 
 
