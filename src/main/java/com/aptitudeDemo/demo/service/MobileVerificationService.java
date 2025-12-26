@@ -1,16 +1,16 @@
 package com.aptitudeDemo.demo.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -35,45 +35,35 @@ public class MobileVerificationService {
     private static final long OTP_EXPIRY_TIME = 5 * 60 * 1000;
 
     public boolean sendOtp(String mobileNumber) {
-        try {
-            // Generate a 6-digit OTP
-            String otp = generateOtp();
-            log.info("Generated OTP: {} for mobile: {}", otp, mobileNumber);
+    try {
+        String otp = generateOtp();
+        log.info("Generated OTP: {} for mobile: {}", otp, mobileNumber);
 
-            // Store OTP with timestamp
-            otpStore.put(mobileNumber, otp);
-            otpTimestamp.put(mobileNumber, System.currentTimeMillis());
+        otpStore.put(mobileNumber, otp);
+        otpTimestamp.put(mobileNumber, System.currentTimeMillis());
 
-            // Send OTP via Fast2SMS
-            String message = "Your OTP for verification is: " + otp + ". Valid for 5 minutes.";
-            
-            Map<String, Object> requestBody = Map.of(
-                "sender_id", senderId,
-                "message", message,
-                "route", route,
-                "numbers", new String[]{mobileNumber}
-            );
+        Map<String, Object> requestBody = Map.of(
+                "route", "otp",
+                "variables_values", otp,
+                "numbers", mobileNumber
+        );
 
-            Map<String, Object> response = fast2SmsWebClient.post()
-                    .uri("/sms")
-                    .body(requestBody)
-                    .retrieve()
-                    .body(Map.class);
+        Map response = fast2SmsWebClient.post()
+                .uri("/sms")
+                .body(requestBody)
+                .retrieve()
+                .body(Map.class);
 
-            log.info("Fast2SMS Response: {}", response);
+        log.info("Fast2SMS response: {}", response);
 
-            // Check if the response indicates success
-            if (response != null && response.containsKey("return")) {
-                boolean success = (Boolean) response.get("return");
-                return success;
-            }
+        return response != null && Boolean.TRUE.equals(response.get("return"));
 
-            return false;
-        } catch (Exception e) {
-            log.error("Error sending OTP to mobile: {}", mobileNumber, e);
-            return false;
-        }
+    } catch (Exception e) {
+        log.error("Error sending OTP", e);
+        return false;
     }
+}
+
 
     public boolean verifyOtp(String mobileNumber, String otp) {
         try {
