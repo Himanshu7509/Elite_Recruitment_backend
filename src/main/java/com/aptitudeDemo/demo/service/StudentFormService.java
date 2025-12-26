@@ -81,6 +81,19 @@ public class StudentFormService {
         return studentFormRepository.findByFullNameContainingIgnoreCase(partialName);
     }
     
+    public boolean verifyStudentMobileNumber(String studentId, String mobileNumber) {
+        log.info("Verifying mobile number for student ID: {}", studentId);
+        Optional<StudentForm> studentForm = studentFormRepository.findById(studentId);
+        if (studentForm.isPresent()) {
+            StudentForm student = studentForm.get();
+            if (mobileNumber.equals(student.getPermanentPhone())) {
+                // Mobile number matches, could add a verification flag if needed
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {
         if (educationRecordDtos == null) {
             return new ArrayList<>();
