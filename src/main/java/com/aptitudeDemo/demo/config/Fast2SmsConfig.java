@@ -8,15 +8,14 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class Fast2SmsConfig {
 
-    @Value("${fast2sms.api-key}")
-    private String apiKey;
+   @Bean(name = "fast2SmsWebClient")
+public RestClient fast2SmsWebClient(
+        @Value("${fast2sms.api.key}") String apiKey) {
 
-    @Bean
-    public RestClient fast2SmsWebClient() {
-        return RestClient.builder()
-                .baseUrl("https://www.fast2sms.com/dev")
-                .defaultHeader("authorization", apiKey)
-                .defaultHeader("Content-Type", "application/json")
-                .build();
-    }
+    return RestClient.builder()
+            .baseUrl("https://www.fast2sms.com/dev/bulkV2")
+            .defaultHeader("authorization", apiKey)
+            .defaultHeader("Content-Type", "application/json")
+            .build();
+}
 }
