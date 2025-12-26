@@ -3,6 +3,7 @@ package com.aptitudeDemo.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -14,7 +15,7 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class OpenAiService {
 
-    private final RestClient restClient;
+    private final RestClient openAiRestClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${openai.model}")
@@ -27,8 +28,8 @@ public class OpenAiService {
         Avoid generic questions.
         """;
 
-    public OpenAiService(RestClient restClient) {
-        this.restClient = restClient;
+    public OpenAiService(@Qualifier("openAiWebClient") RestClient openAiRestClient) {
+        this.openAiRestClient = openAiRestClient;
     }
 
     public String generateTest(TestRequest request) throws Exception {
@@ -44,7 +45,7 @@ public class OpenAiService {
                 "temperature", 0.4
         );
 
-        Map      response = restClient.post()
+        Map      response = openAiRestClient.post()
                 .uri("/chat/completions")
                 .body(body)
                 .retrieve()
