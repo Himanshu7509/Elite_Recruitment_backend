@@ -63,9 +63,7 @@ public class WebSecurityConfig {
 
         // Update these for production
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:4200",
-                "http://localhost:5173",
+            "http://localhost:*",
                 "https://elite-apptitude-test-fswdxsy4b-purvanshu-khapres-projects.vercel.app",
                 "https://elite-apptitude-test.vercel.app",
                 "https://unperpetuating-may-eely.ngrok-free.dev/"
