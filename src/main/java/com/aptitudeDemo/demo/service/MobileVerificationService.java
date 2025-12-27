@@ -42,10 +42,13 @@ public class MobileVerificationService {
         otpStore.put(mobileNumber, otp);
         otpTimestamp.put(mobileNumber, System.currentTimeMillis());
 
+        String message = "Your OTP for verification is: " + otp + ". Valid for 5 minutes.";
+        
         Map<String, Object> requestBody = Map.of(
-                "route", "otp",
-                "variables_values", otp,
-                "numbers", mobileNumber
+                "sender_id", senderId,
+                "message", message,
+                "route", route,
+                "numbers", new String[]{mobileNumber}
         );
 
         Map response = fast2SmsWebClient.post()
@@ -56,13 +59,35 @@ public class MobileVerificationService {
 
         log.info("Fast2SMS response: {}", response);
 
-        return response != null && Boolean.TRUE.equals(response.get("return"));
-
+        log.info("Fast2SMS response: {}", response);
+        
+        // Check the response structure from Fast2SMS API
+        if (response != null && response.containsKey("return")) {
+            Object returnObj = response.get("return");
+            if (returnObj instanceof Boolean) {
+                return (Boolean) returnObj;
+            } else if (returnObj instanceof String) {
+                return "true".equalsIgnoreCase((String) returnObj);
+            }
+            // For numeric responses (0/1)
+            else if (returnObj instanceof Number) {
+                return ((Number) returnObj).intValue() == 1;
+            }
+        }
+        
+        // Log the specific error if available
+        if (response != null && response.containsKey("message")) {
+            log.error("Fast2SMS API error message: {}", response.get("message"));
+        }
+        
+        return false;
+        
     } catch (Exception e) {
         log.error("Error sending OTP", e);
         return false;
     }
 }
+
 
 
     public boolean verifyOtp(String mobileNumber, String otp) {

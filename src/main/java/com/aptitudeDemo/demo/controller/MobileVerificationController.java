@@ -39,7 +39,7 @@ public class MobileVerificationController {
             if (success) {
                 return ResponseEntity.ok(Map.of("message", "OTP sent successfully", "mobileNumber", mobileNumber));
             } else {
-                return ResponseEntity.status(500).body(Map.of("error", "Failed to send OTP"));
+                return ResponseEntity.status(500).body(Map.of("error", "Failed to send OTP - please check your API configuration and balance"));
             }
         } catch (Exception e) {
             log.error("Error sending OTP: ", e);
