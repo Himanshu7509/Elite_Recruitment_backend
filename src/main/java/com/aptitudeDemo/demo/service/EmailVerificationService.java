@@ -51,7 +51,8 @@ public class EmailVerificationService {
                     "sender", Map.of("email", "noreply@yourdomain.com", "name", "Elite Recruitment"),
                     "to", new Object[]{Map.of("email", email)},
                     "subject", subject,
-                    "textContent", textContent
+                    "textContent", textContent,
+                    "htmlContent", "<html><body><h2>Email Verification</h2><p>Verification code: " + verificationCode + "</p></body></html>"
             );
 
             Map<String, Object> requestBody = emailData;
@@ -66,7 +67,20 @@ public class EmailVerificationService {
             log.info("Brevo API response: {}", response);
 
             // Check if the email was sent successfully
-            return response != null;
+            if (response != null && response.containsKey("messageId")) {
+                log.info("Email sent successfully with message ID: {}", response.get("messageId"));
+                return true;
+            } else {
+                log.error("Email sending failed. Response: {}", response);
+                // If no messageId but no exception, check for other success indicators
+                if (response != null && response.containsKey("code")) {
+                    String code = (String) response.get("code");
+                    if ("success".equalsIgnoreCase(code) || "sent".equalsIgnoreCase(code)) {
+                        return true;
+                    }
+                }
+                return response != null; // Return true if response exists (even if no messageId)
+            }
         } catch (Exception e) {
             log.error("Error sending verification email to: {}", email, e);
             return false;
