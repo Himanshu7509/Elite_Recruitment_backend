@@ -129,6 +129,50 @@ public class EmailVerificationService {
             return false;
         }
     }
+    
+    public boolean verifyCodeOnly(String verificationCode) {
+        try {
+            // Find the email associated with this verification code
+            String email = null;
+            for (Map.Entry<String, String> entry : verificationTokens.entrySet()) {
+                if (entry.getValue().equals(verificationCode)) {
+                    email = entry.getKey();
+                    break;
+                }
+            }
+            
+            if (email == null) {
+                log.warn("No email found for verification code: {}", verificationCode);
+                return false;
+            }
+            
+            // Check if the token has expired
+            Long timestamp = tokenTimestamps.get(email);
+            if (timestamp != null && System.currentTimeMillis() - timestamp > TOKEN_EXPIRY_TIME) {
+                log.warn("Verification code expired for email: {}", email);
+                // Clean up expired token
+                verificationTokens.remove(email);
+                tokenTimestamps.remove(email);
+                return false;
+            }
+            
+            // Verify the code
+            boolean isValid = verificationTokens.get(email).equals(verificationCode);
+            if (isValid) {
+                // Clean up after successful verification
+                verificationTokens.remove(email);
+                tokenTimestamps.remove(email);
+                log.info("Email verified successfully for: {} using code: {}", email, verificationCode);
+            } else {
+                log.warn("Invalid verification code for email: {}", email);
+            }
+            
+            return isValid;
+        } catch (Exception e) {
+            log.error("Error verifying code: {}", verificationCode, e);
+            return false;
+        }
+    }
 
     private String generateVerificationCode() {
         Random random = new Random();
