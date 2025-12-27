@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -18,6 +19,12 @@ public class EmailVerificationService {
     @Autowired
     @Qualifier("brevoWebClient")
     private RestClient brevoWebClient;
+    
+    @Value("${brevo.sender.email:hello@eliterecruitment.com}")
+    private String senderEmail;
+    
+    @Value("${brevo.sender.name:Elite Recruitment}")
+    private String senderName;
 
 
 
@@ -47,15 +54,13 @@ public class EmailVerificationService {
                     "If you didn't request this, please ignore this email.";
 
             // Prepare the request body for Brevo
-            Map<String, Object> emailData = Map.of(
-                    "sender", Map.of("email", "noreply@yourdomain.com", "name", "Elite Recruitment"),
+            Map<String, Object> requestBody = Map.of(
+                    "sender", Map.of("email", senderEmail, "name", senderName),
                     "to", new Object[]{Map.of("email", email)},
                     "subject", subject,
-                    "textContent", textContent,
-                    "htmlContent", "<html><body><h2>Email Verification</h2><p>Verification code: " + verificationCode + "</p></body></html>"
+                    "htmlContent", "<html><body><h2>Email Verification</h2><p>Verification code: " + verificationCode + "</p></body></html>",
+                    "textContent", textContent
             );
-
-            Map<String, Object> requestBody = emailData;
 
             // Send the email via Brevo
             Map<String, Object> response = brevoWebClient.post()
