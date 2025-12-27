@@ -1,13 +1,13 @@
 package com.aptitudeDemo.demo.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.aptitudeDemo.demo.model.student.StudentForm;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface StudentFormRepository extends MongoRepository<StudentForm, String> {
@@ -26,4 +26,7 @@ public interface StudentFormRepository extends MongoRepository<StudentForm, Stri
      */
     @Query("{ 'fullName': { $regex: ?0, $options: 'i' } }")
     List<StudentForm> findByFullNameContainingIgnoreCase(String fullName);
+    
+    Optional<StudentForm> findByPermanentPhone(String permanentPhone);
+    Optional<StudentForm> findByPermanentEmail(String permanentEmail);
 }
