@@ -67,7 +67,8 @@ public class WebSecurityConfig {
                 "http://localhost:4200",
                 "http://localhost:5173",
                 "https://elite-apptitude-test-fswdxsy4b-purvanshu-khapres-projects.vercel.app",
-                "https://elite-apptitude-test.vercel.app"
+                "https://elite-apptitude-test.vercel.app",
+                "https://unperpetuating-may-eely.ngrok-free.dev/"
 
         ));
 
