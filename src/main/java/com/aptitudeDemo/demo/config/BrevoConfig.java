@@ -10,6 +10,12 @@ public class BrevoConfig {
 
     @Value("${brevo.api-key}")
     private String apiKey;
+    
+    @Value("${brevo.sender.email}")
+    private String senderEmail;
+    
+    @Value("${brevo.sender.name}")
+    private String senderName;
 
     @Bean
     public RestClient brevoWebClient() {
