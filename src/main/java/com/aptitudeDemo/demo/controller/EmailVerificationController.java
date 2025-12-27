@@ -52,18 +52,13 @@ public class EmailVerificationController {
         log.info("Received request to verify email");
 
         try {
-            String email = request.get("email");
             String verificationCode = request.get("verificationCode");
 
-            if (email == null || verificationCode == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Email and verification code are required"));
+            if (verificationCode == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Verification code is required"));
             }
 
-            if (!isValidEmail(email)) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid email format"));
-            }
-
-            boolean isValid = emailVerificationService.verifyEmail(email, verificationCode);
+            boolean isValid = emailVerificationService.verifyCodeOnly(verificationCode);
             if (isValid) {
                 return ResponseEntity.ok(Map.of("message", "Email verified successfully", "verified", true));
             } else {
