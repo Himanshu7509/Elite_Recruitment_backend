@@ -54,9 +54,7 @@ public class EmailVerificationService {
                     "textContent", textContent
             );
 
-            Map<String, Object> requestBody = Map.of(
-                    "email", emailData
-            );
+            Map<String, Object> requestBody = emailData;
 
             // Send the email via Brevo
             Map<String, Object> response = brevoWebClient.post()
