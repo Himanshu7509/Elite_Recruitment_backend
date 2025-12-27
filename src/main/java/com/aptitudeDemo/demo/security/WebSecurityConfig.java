@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                     "/v3/api-docs/**",
                     "/feedback/**",
                     "/result/**",
-                    "/mobile-verification/**"
+                    "/email-verification/**"
                 ).permitAll()
 
                 // All other endpoints require authentication
