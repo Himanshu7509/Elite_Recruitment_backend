@@ -17,17 +17,18 @@ import com.aptitudeDemo.demo.dto.student.QuestionsRequest;
 import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.service.QuestionsService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/questions")
 public class QuestionsController {
-    private QuestionsService service;
+    private final QuestionsService service;
 
-    // CREATE
+    public QuestionsController(QuestionsService service) {
+        this.service = service;
+    }
+
     @PostMapping("/submit")
     public ResponseEntity<Questions> create(
             @RequestBody QuestionsRequest request) {

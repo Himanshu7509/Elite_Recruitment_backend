@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/email-verification")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
 public class EmailVerificationController {
 
