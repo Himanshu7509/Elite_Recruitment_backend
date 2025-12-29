@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                     "/v3/api-docs/**",
                     "/feedback/**",
                     "/result/**",
+                    "/questions/**"
                     "/email-verification/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
