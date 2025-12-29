@@ -18,29 +18,30 @@ import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.service.QuestionsService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/questions")
-@RequiredArgsConstructor
-@CrossOrigin
 public class QuestionsController {
     private final QuestionsService service;
 
     // CREATE
-    @PostMapping
+    @PostMapping("/submit")
     public ResponseEntity<Questions> create(
             @RequestBody QuestionsRequest request) {
         return ResponseEntity.ok(service.create(request));
     }
 
     // GET ALL
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Questions>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     // GET BY ID
-    @GetMapping("/{id}")
+    @GetMapping("/question/{id}")
     public ResponseEntity<Questions> getById(@PathVariable String id) {
         return ResponseEntity.ok(service.getById(id));
     }
@@ -53,7 +54,7 @@ public class QuestionsController {
     }
 
     // UPDATE
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Questions> update(
             @PathVariable String id,
             @RequestBody QuestionsRequest request) {
@@ -61,7 +62,7 @@ public class QuestionsController {
     }
 
     // DELETE
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.ok("Deleted successfully");
