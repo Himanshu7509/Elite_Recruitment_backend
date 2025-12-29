@@ -20,7 +20,6 @@ import com.aptitudeDemo.demo.service.ResultService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/result")
 public class ResultController {

@@ -60,30 +60,29 @@ public class WebSecurityConfig {
 
     // CORS configuration
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration config = new CorsConfiguration();
+    CorsConfiguration config = new CorsConfiguration();
 
-        // Update these for production
-        config.setAllowedOrigins(List.of(
-            "http://localhost:*",
-                "https://elite-apptitude-test-fswdxsy4b-purvanshu-khapres-projects.vercel.app",
-                "https://elite-apptitude-test.vercel.app",
-                "https://unperpetuating-may-eely.ngrok-free.dev/"
+    config.setAllowedOriginPatterns(List.of(
+        "http://localhost:*",
+        "https://elite-apptitude-test-fswdxsy4b-purvanshu-khapres-projects.vercel.app",
+        "https://elite-apptitude-test.vercel.app",
+        "https://unperpetuating-may-eely.ngrok-free.dev"
+    ));
 
-        ));
+    config.setAllowedMethods(List.of(
+        "GET", "POST", "PUT", "DELETE", "OPTIONS"
+    ));
 
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
 
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source =
+            new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+    return source;
+}
 
-        return source;
-    }
 }
