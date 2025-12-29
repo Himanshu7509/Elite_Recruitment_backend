@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aptitudeDemo.demo.dto.student.QuestionsRequest;
+import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.service.QuestionsService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,36 +24,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin
 public class QuestionsController {
-
     private final QuestionsService service;
 
     // CREATE
     @PostMapping
-    public ResponseEntity<QuestionsRequest> create(@RequestBody QuestionsRequest request) {
+    public ResponseEntity<Questions> create(
+            @RequestBody QuestionsRequest request) {
         return ResponseEntity.ok(service.create(request));
     }
 
-    // READ ALL
+    // GET ALL
     @GetMapping
-    public ResponseEntity<List<QuestionsRequest>> getAll() {
+    public ResponseEntity<List<Questions>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
-    // READ BY ID
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionsRequest> getById(@PathVariable String id) {
+    public ResponseEntity<Questions> getById(@PathVariable String id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    // READ BY EMAIL
+    // GET BY EMAIL
     @GetMapping("/email/{email}")
-    public ResponseEntity<List<QuestionsRequest>> getByEmail(@PathVariable String email) {
+    public ResponseEntity<List<Questions>> getByEmail(
+            @PathVariable String email) {
         return ResponseEntity.ok(service.getByEmail(email));
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<QuestionsRequest> update(
+    public ResponseEntity<Questions> update(
             @PathVariable String id,
             @RequestBody QuestionsRequest request) {
         return ResponseEntity.ok(service.update(id, request));

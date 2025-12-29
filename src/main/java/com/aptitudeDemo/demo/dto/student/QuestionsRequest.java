@@ -2,7 +2,6 @@ package com.aptitudeDemo.demo.dto.student;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 
 import com.aptitudeDemo.demo.model.OpenAI.Question;
 

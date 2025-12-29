@@ -18,8 +18,5 @@ public class Questions {
     private String id;
     private String email;
     private String fullName;
-    private String aiQuestion;
-    private List<String> Options;
-    private String aiAnswer;
-    private String userAnswer;
+    private List<Question> questions;
 }
