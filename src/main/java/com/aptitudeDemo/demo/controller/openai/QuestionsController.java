@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/questions")
 public class QuestionsController {
-    private final QuestionsService service;
+    private QuestionsService service;
 
     // CREATE
     @PostMapping("/submit")
