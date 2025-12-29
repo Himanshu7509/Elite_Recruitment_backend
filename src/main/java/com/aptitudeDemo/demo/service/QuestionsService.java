@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.service;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aptitudeDemo.demo.dto.student.QuestionsRequest;
@@ -9,6 +10,8 @@ import com.aptitudeDemo.demo.repository.QuestionsRepository;
 
 @Service
 public class QuestionsService {
+    
+    @Autowired
     private QuestionsRepository repository;
 
     
