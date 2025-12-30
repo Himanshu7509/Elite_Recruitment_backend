@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tools.jackson.databind.ObjectMapper;
+
 
 @Service
 public class OpenAiService {
