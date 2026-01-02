@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aptitudeDemo.demo.dto.student.EmailSubmitRequest;
 import com.aptitudeDemo.demo.dto.student.EmailVerificationRequest;
 import com.aptitudeDemo.demo.service.EmailVerificationService;
 
@@ -44,6 +45,29 @@ public class EmailVerificationController {
             return ResponseEntity.status(500).body(Map.of("error", "Internal server error"));
         }
     }
+
+    @PostMapping("/submit")
+public ResponseEntity<?> sendTestSubmittedMail(
+        @RequestBody EmailSubmitRequest request) {
+
+    log.info("Sending test submission email to {}", request.getEmail());
+
+    if (request.getEmail() == null || request.getName() == null) {
+        return ResponseEntity.badRequest()
+                .body(Map.of("error", "Email and name are required"));
+    }
+
+    boolean sent = emailVerificationService
+            .sendTestSubmittedEmail(request.getEmail(), request.getName());
+
+    if (sent) {
+        return ResponseEntity.ok(
+                Map.of("message", "Test submission email sent successfully"));
+    } else {
+        return ResponseEntity.status(500)
+                .body(Map.of("error", "Failed to send email"));
+    }
+}
 
     @PostMapping("/verify")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> request) {
