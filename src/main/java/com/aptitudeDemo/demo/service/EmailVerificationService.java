@@ -92,6 +92,94 @@ public class EmailVerificationService {
         }
     }
 
+    private String buildTestSubmittedHtml(String name, String email) {
+        int year = java.time.Year.now().getValue();
+    
+        return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Test Submitted - Elite Jobs</title>
+    </head>
+    
+    <body style="margin:0; padding:0; font-family:Arial, sans-serif; background-color:#f5f5f5;">
+    <table width="100%%">
+    <tr>
+    <td align="center" style="padding:20px 0;">
+    <table width="600" style="background:#ffffff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    
+    <tr>
+    <td style="padding:30px 40px; background:linear-gradient(135deg,#667eea,#764ba2);">
+    <h1 style="color:#fff; text-align:center;">Elite Jobs</h1>
+    <p style="color:#eee; text-align:center;">Job Portal Platform</p>
+    </td>
+    </tr>
+    
+    <tr>
+    <td style="padding:40px;">
+    <h2>Hello %s,</h2>
+    
+    <p>We’re happy to inform you that your <strong>Aptitude Test</strong> has been
+    <strong>successfully submitted</strong>.</p>
+    
+    <div style="background:#e7f5ff; padding:15px; border-left:4px solid #339af0;">
+    <p><strong>✅ Submission Status:</strong> Successful</p>
+    </div>
+    
+    <p>Our team will review your test and notify you about next steps.</p>
+    
+    <p>Best of luck!</p>
+    </td>
+    </tr>
+    
+    <tr>
+    <td style="padding:30px; background:#f8f9fa; text-align:center;">
+    <p>© %d Elite Jobs. All rights reserved.</p>
+    <p>This email was sent to %s</p>
+    </td>
+    </tr>
+    
+    </table>
+    </td>
+    </tr>
+    </table>
+    </body>
+    </html>
+    """.formatted(name, year, email);
+    }
+    
+
+    public boolean sendTestSubmittedEmail(String email, String name) {
+        try {
+            String subject = "Aptitude Test Submitted - Elite Jobs";
+    
+            String htmlContent = buildTestSubmittedHtml(name, email);
+    
+            Map<String, Object> requestBody = Map.of(
+                "sender", Map.of("email", senderEmail, "name", senderName),
+                "to", new Object[]{ Map.of("email", email) },
+                "subject", subject,
+                "htmlContent", htmlContent
+            );
+    
+            Map<String, Object> response = brevoWebClient.post()
+                    .uri("/smtp/email")
+                    .body(requestBody)
+                    .retrieve()
+                    .body(Map.class);
+    
+            log.info("Test submission email response: {}", response);
+    
+            return response != null;
+    
+        } catch (Exception e) {
+            log.error("Failed to send test submission email to {}", email, e);
+            return false;
+        }
+    }
+    
+
     public boolean verifyEmail(String email, String verificationCode) {
         try {
             // Check if a verification token exists for this email
