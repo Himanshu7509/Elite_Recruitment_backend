@@ -36,61 +36,143 @@ public class EmailVerificationService {
     private static final long TOKEN_EXPIRY_TIME = 24 * 60 * 60 * 1000;
 
     public boolean sendVerificationEmail(String email) {
-        try {
-            // Generate a 6-digit verification code
-            String verificationCode = generateVerificationCode();
-            log.info("Generated verification code: {} for email: {}", verificationCode, email);
+    try {
+        // Generate OTP
+        String verificationCode = generateVerificationCode();
+        log.info("Generated verification code: {} for email: {}", verificationCode, email);
 
-            // Store the verification code with timestamp
-            verificationTokens.put(email, verificationCode);
-            tokenTimestamps.put(email, System.currentTimeMillis());
+        // Store OTP + timestamp
+        verificationTokens.put(email, verificationCode);
+        tokenTimestamps.put(email, System.currentTimeMillis());
 
-            // Create email content
-            String subject = "Email Verification";
-            String textContent = "Email Verification\n\n" +
-                    "Thank you for registering. Please use the following verification code:\n\n" +
-                    verificationCode + "\n\n" +
-                    "This code will expire in 24 hours.\n\n" +
-                    "If you didn't request this, please ignore this email.";
+        // Optional: derive user name from email
+        String userName = email.split("@")[0];
 
-            // Prepare the request body for Brevo
-            Map<String, Object> requestBody = Map.of(
-                    "sender", Map.of("email", senderEmail, "name", senderName),
-                    "to", new Object[]{Map.of("email", email)},
-                    "subject", subject,
-                    "htmlContent", "<html><body><h2>Email Verification</h2><p>Verification code: " + verificationCode + "</p></body></html>",
-                    "textContent", textContent
-            );
+        String subject = "OTP Verification - Elite Aptitude Test";
 
-            // Send the email via Brevo
-            Map<String, Object> response = brevoWebClient.post()
-                    .uri("/smtp/email")
-                    .body(requestBody)
-                    .retrieve()
-                    .body(Map.class);
+        String htmlContent = buildOtpHtmlTemplate(
+                userName,
+                verificationCode,
+                email
+        );
 
-            log.info("Brevo API response: {}", response);
+        String textContent =
+                "Email Verification\n\n" +
+                "Your OTP is: " + verificationCode + "\n" +
+                "This OTP is valid for 15 minutes.\n\n" +
+                "Do not share this code with anyone.";
 
-            // Check if the email was sent successfully
-            if (response != null && response.containsKey("messageId")) {
-                log.info("Email sent successfully with message ID: {}", response.get("messageId"));
-                return true;
-            } else {
-                log.error("Email sending failed. Response: {}", response);
-                // If no messageId but no exception, check for other success indicators
-                if (response != null && response.containsKey("code")) {
-                    String code = (String) response.get("code");
-                    if ("success".equalsIgnoreCase(code) || "sent".equalsIgnoreCase(code)) {
-                        return true;
-                    }
-                }
-                return response != null; // Return true if response exists (even if no messageId)
-            }
-        } catch (Exception e) {
-            log.error("Error sending verification email to: {}", email, e);
-            return false;
-        }
+        // Brevo request body
+        Map<String, Object> requestBody = Map.of(
+                "sender", Map.of("email", senderEmail, "name", senderName),
+                "to", new Object[]{Map.of("email", email)},
+                "subject", subject,
+                "htmlContent", htmlContent,
+                "textContent", textContent
+        );
+
+        Map<String, Object> response = brevoWebClient.post()
+                .uri("/smtp/email")
+                .body(requestBody)
+                .retrieve()
+                .body(Map.class);
+
+        log.info("Brevo API response: {}", response);
+
+        return response != null;
+
+    } catch (Exception e) {
+        log.error("Error sending verification email to: {}", email, e);
+        return false;
     }
+}
+
+private String buildOtpHtmlTemplate(String userName, String otp, String email) {
+
+    return """
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Verification - Elite Apptitude Test</title>
+</head>
+
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f5f5f5;">
+  <table width="100%%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;">
+    <tr>
+      <td align="center" style="padding:20px 0;">
+
+        <table width="600" cellpadding="0" cellspacing="0"
+          style="background-color:#ffffff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden;">
+
+          <tr>
+            <td style="padding:30px 40px; background:linear-gradient(135deg,#667eea,#764ba2);">
+              <h1 style="margin:0; color:#ffffff; text-align:center;">
+                Elite Apptitude Test
+              </h1>
+              <p style="margin:8px 0 0; color:rgba(255,255,255,0.9); text-align:center;">
+                Elite Apptitude Test
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:40px;">
+              <h2>Hello %s,</h2>
+
+              <p>
+                Thank you for registering with <strong>Elite Apptitude Test</strong>.
+                Please verify your email using the OTP below.
+              </p>
+
+              <div style="text-align:center; margin:30px 0;">
+                <div style="display:inline-block; padding:18px 30px; background:#f8f9fa;
+                            border:2px dashed #667eea; border-radius:10px;">
+                  <span style="font-size:26px; font-weight:bold; letter-spacing:4px; color:#667eea;">
+                    %s
+                  </span>
+                </div>
+              </div>
+
+              <p>
+                This OTP is valid for <strong>15 minutes</strong>.
+                Do not share it with anyone.
+              </p>
+
+              <div style="margin:25px 0; padding:15px; background:#fff3cd;
+                          border-left:4px solid #ffc107;">
+                <strong>Security Alert</strong><br/>
+                We will never ask for your OTP.
+              </div>
+
+              <p style="font-size:14px;">
+                If you did not request this verification, please ignore this email.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:30px; background:#f8f9fa; text-align:center; font-size:13px;">
+              © %d Elite Apptitude Test<br/>
+              This email was sent to %s
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+""".formatted(
+            userName,
+            otp,
+            java.time.Year.now().getValue(),
+            email
+    );
+}
+
 
     private String buildTestSubmittedHtml(String name, String email) {
         int year = java.time.Year.now().getValue();
@@ -179,44 +261,7 @@ public class EmailVerificationService {
         }
     }
     
-
-    public boolean verifyEmail(String email, String verificationCode) {
-        try {
-            // Check if a verification token exists for this email
-            String storedCode = verificationTokens.get(email);
-            if (storedCode == null) {
-                log.warn("No verification code found for email: {}", email);
-                return false;
-            }
-
-            // Check if the token has expired
-            Long timestamp = tokenTimestamps.get(email);
-            if (timestamp != null && System.currentTimeMillis() - timestamp > TOKEN_EXPIRY_TIME) {
-                log.warn("Verification code expired for email: {}", email);
-                // Clean up expired token
-                verificationTokens.remove(email);
-                tokenTimestamps.remove(email);
-                return false;
-            }
-
-            // Verify the code
-            boolean isValid = storedCode.equals(verificationCode);
-            if (isValid) {
-                // Clean up after successful verification
-                verificationTokens.remove(email);
-                tokenTimestamps.remove(email);
-                log.info("Email verified successfully for: {}", email);
-            } else {
-                log.warn("Invalid verification code for email: {} - provided: {}, stored: {}", 
-                        email, verificationCode, storedCode);
-            }
-
-            return isValid;
-        } catch (Exception e) {
-            log.error("Error verifying email: {}", email, e);
-            return false;
-        }
-    }
+    
     
     public boolean verifyCodeOnly(String verificationCode) {
         try {
