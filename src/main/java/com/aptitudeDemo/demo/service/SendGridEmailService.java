@@ -20,6 +20,10 @@ public class SendGridEmailService {
     @Value("${sendgrid.from.email}")
     private String fromEmail;
 
+    public void sendEmail(String to, String subject, String message) {
+        send(to, subject, message, "text/plain");
+    }
+
     public void sendOtpEmail(String to, String userName, String otp) {
 
         String subject = "OTP Verification - Elite Aptitude Test";
