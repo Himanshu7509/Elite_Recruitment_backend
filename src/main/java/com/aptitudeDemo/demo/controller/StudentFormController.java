@@ -1,9 +1,11 @@
 package com.aptitudeDemo.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,6 +97,14 @@ public class StudentFormController {
     
                 ))
             );
+
+            } catch (IllegalStateException e) {
+        // ✅ Duplicate email case
+        log.warn("Duplicate email submission blocked: {}", studentFormRequest.getPermanentEmail());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("error", e.getMessage()));
+                
         } catch (Exception e) {
             log.error("Error saving student form: ", e);
             return ResponseEntity.status(500).body("Error saving student form: " + e.getMessage());
