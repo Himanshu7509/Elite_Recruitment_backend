@@ -17,28 +17,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class WebSecurityConfig {
     
-
-
-
-    // Main security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // Enable CORS (frontend support)
             .cors(cors ->  cors.configurationSource(corsConfigurationSource()))
 
-            // Disable CSRF for stateless REST APIs
             .csrf(csrf -> csrf.disable())
 
-            // Stateless session (JWT / API based)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // Authorization rules
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
                 .requestMatchers(
                     "/auth/**",
                     "/open/generate",
@@ -52,14 +43,12 @@ public class WebSecurityConfig {
                 ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // All other endpoints require authentication
                 .anyRequest().authenticated()
             );
 
         return http.build();
     }
 
-    // CORS configuration
     @Bean
 public CorsConfigurationSource corsConfigurationSource() {
 

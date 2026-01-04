@@ -32,7 +32,7 @@ public class ResultService {
     return resultRepository
             .findByFullName(fullName)
             .map(Result::getCorrectAnswer)
-            .orElse(0);   // return 0 if student not found
+            .orElse(0);
 }
     
     public List<Result> getAllResults() {

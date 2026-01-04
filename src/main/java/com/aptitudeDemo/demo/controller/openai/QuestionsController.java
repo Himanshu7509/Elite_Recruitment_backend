@@ -36,26 +36,22 @@ public class QuestionsController {
         return ResponseEntity.ok(service.create(request));
     }
 
-    // GET ALL
     @GetMapping("/all")
     public ResponseEntity<List<Questions>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
-    // GET BY ID
     @GetMapping("/question/{id}")
     public ResponseEntity<Questions> getById(@PathVariable String id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    // GET BY EMAIL
     @GetMapping("/email/{email}")
     public ResponseEntity<List<Questions>> getByEmail(
             @PathVariable String email) {
         return ResponseEntity.ok(service.getByEmail(email));
     }
 
-    // UPDATE
     @PutMapping("/update/{id}")
     public ResponseEntity<Questions> update(
             @PathVariable String id,
@@ -63,7 +59,6 @@ public class QuestionsController {
         return ResponseEntity.ok(service.update(id, request));
     }
 
-    // DELETE
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
         service.delete(id);

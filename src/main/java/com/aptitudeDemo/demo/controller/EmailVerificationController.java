@@ -28,7 +28,6 @@ public class EmailVerificationController {
         log.info("Received request to send verification email to: {}", request.getEmail());
 
         try {
-            // Validate email format (basic validation)
             String email = request.getEmail();
             if (email == null || !isValidEmail(email)) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid email format"));
@@ -92,7 +91,6 @@ public ResponseEntity<?> sendTestSubmittedMail(
         }
     }
 
-    // Basic email validation
     private boolean isValidEmail(String email) {
         return email != null && email.matches("^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$");
     }

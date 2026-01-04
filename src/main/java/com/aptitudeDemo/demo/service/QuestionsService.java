@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class QuestionsService {
     
     public Questions create(QuestionsRequest request) {
         Questions entity = new Questions(
-                null, // MongoDB generates ID
+                null,
                 request.getEmail(),
                 request.getFullName(),
                 request.getQuestions()

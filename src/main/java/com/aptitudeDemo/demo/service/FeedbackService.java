@@ -47,7 +47,7 @@ public class FeedbackService {
     return feedbackRepository
             .findByName(fullName)
             .map(Feedback::getRating)
-            .orElse(0);   // return 0 if feedback not found
+            .orElse(0);
 }
 
 
