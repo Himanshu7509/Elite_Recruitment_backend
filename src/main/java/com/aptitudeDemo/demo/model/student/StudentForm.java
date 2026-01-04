@@ -3,6 +3,7 @@ package com.aptitudeDemo.demo.model.student;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +35,8 @@ public class StudentForm {
     private String permanentAddressLine;
     private String permanentPin;
     private String permanentPhone;
+
+    @Indexed(unique=true)
     private String permanentEmail; // Moved email to permanent address section
 
     // -------- REFERENCES --------

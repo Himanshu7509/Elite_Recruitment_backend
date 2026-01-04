@@ -26,9 +26,20 @@ public class StudentFormService {
 
     public StudentForm saveStudentForm(StudentFormRequest studentFormRequest) {
         log.info("Saving student form for: {}", studentFormRequest.getFullName());
-        
+
+        String email = studentFormRequest.getPermanentEmail()
+                .trim()
+                .toLowerCase();
+
+        if (studentFormRepository.existsByPermanentEmail(email)) {
+            log.warn("Duplicate email detected: {}", email);
+            throw new IllegalStateException(
+                "This email is already registered. You cannot submit the form again."
+            );
+        }
+
         StudentForm studentForm = new StudentForm();
-        // Copy all primitive properties
+
         studentForm.setFullName(studentFormRequest.getFullName());
         studentForm.setFatherName(studentFormRequest.getFatherName());
         studentForm.setPostAppliedFor(studentFormRequest.getPostAppliedFor());
@@ -37,24 +48,20 @@ public class StudentFormService {
         studentForm.setAge(studentFormRequest.getAge());
         studentForm.setMaritalStatus(studentFormRequest.getMaritalStatus());
         studentForm.setSex(studentFormRequest.getSex());
-        studentForm.setLinkedInProfile(studentFormRequest.getLinkedInProfile()); // Added LinkedIn profile
+        studentForm.setLinkedInProfile(studentFormRequest.getLinkedInProfile());
         
-        // Copy permanent address information (removed communication address)
         studentForm.setPermanentAddressLine(studentFormRequest.getPermanentAddressLine());
         studentForm.setPermanentPin(studentFormRequest.getPermanentPin());
         studentForm.setPermanentPhone(studentFormRequest.getPermanentPhone());
-        studentForm.setPermanentEmail(studentFormRequest.getPermanentEmail()); // Moved email to permanent address
+        studentForm.setPermanentEmail(studentFormRequest.getPermanentEmail());
         
-        // Copy reference information
         studentForm.setReference1Name(studentFormRequest.getReference1Name());
         studentForm.setReference1Mobile(studentFormRequest.getReference1Mobile());
         studentForm.setReference2Name(studentFormRequest.getReference2Name());
         studentForm.setReference2Mobile(studentFormRequest.getReference2Mobile());
         
-        // Copy language
         studentForm.setLanguage(studentFormRequest.getLanguage());
         
-        // Convert and copy nested objects
         studentForm.setAcademicRecords(convertEducationRecords(studentFormRequest.getAcademicRecords()));
         studentForm.setWorkExperiences(convertWorkExperiences(studentFormRequest.getWorkExperiences()));
         
@@ -71,13 +78,11 @@ public class StudentFormService {
     
     public Optional<StudentForm> getStudentByName(String fullName) {
         log.info("Fetching student form by name: {}", fullName);
-        // This uses MongoDB's built-in query method for exact match
         return studentFormRepository.findByFullName(fullName);
     }
     
     public List<StudentForm> getStudentsByNameContaining(String partialName) {
         log.info("Fetching student forms containing name: {}", partialName);
-        // This uses MongoDB's regex query for partial match (case-insensitive)
         return studentFormRepository.findByFullNameContainingIgnoreCase(partialName);
     }
     
@@ -87,7 +92,6 @@ public class StudentFormService {
         if (studentForm.isPresent()) {
             StudentForm student = studentForm.get();
             if (mobileNumber.equals(student.getPermanentPhone())) {
-                // Mobile number matches, could add a verification flag if needed
                 return true;
             }
         }
