@@ -51,4 +51,9 @@ public class StudentForm {
     // -------- WORK EXPERIENCE --------
     private List<WorkExperience> workExperiences;
 
+    private String experienceLevel;
+    private int yearsOfExperience;
+    private List<String> primarySkills;
+    private List<String> secondarySkills;
+
 }

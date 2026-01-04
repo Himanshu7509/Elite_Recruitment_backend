@@ -61,6 +61,10 @@ public class StudentFormService {
         studentForm.setReference2Mobile(studentFormRequest.getReference2Mobile());
         
         studentForm.setLanguage(studentFormRequest.getLanguage());
+        studentForm.setExperienceLevel(studentFormRequest.getExperienceLevel());
+        studentForm.setYearsOfExperience(studentFormRequest.getYearsOfExperience());
+        studentForm.setPrimarySkills(studentFormRequest.getPrimarySkills());
+        studentForm.setSecondarySkills(studentFormRequest.getSecondarySkills());
         
         studentForm.setAcademicRecords(convertEducationRecords(studentFormRequest.getAcademicRecords()));
         studentForm.setWorkExperiences(convertWorkExperiences(studentFormRequest.getWorkExperiences()));
