@@ -3,6 +3,7 @@ package com.aptitudeDemo.demo.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,27 +24,40 @@ public class EmailVerificationController {
     @Autowired
     private EmailVerificationService emailVerificationService;
 
-    @PostMapping("/send-verification")
-    public ResponseEntity<?> sendVerificationEmail(@RequestBody EmailVerificationRequest request) {
-        log.info("Received request to send verification email to: {}", request.getEmail());
+   @PostMapping("/send-verification")
+public ResponseEntity<?> sendVerificationEmail(@RequestBody EmailVerificationRequest request) {
 
-        try {
-            String email = request.getEmail();
-            if (email == null || !isValidEmail(email)) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Invalid email format"));
-            }
+    log.info("Received request to send verification email to: {}", request.getEmail());
 
-            boolean success = emailVerificationService.sendVerificationEmail(email);
-            if (success) {
-                return ResponseEntity.ok(Map.of("message", "Verification email sent successfully", "email", email));
-            } else {
-                return ResponseEntity.status(500).body(Map.of("error", "Failed to send verification email - please check your API configuration"));
-            }
-        } catch (Exception e) {
-            log.error("Error sending verification email: ", e);
-            return ResponseEntity.status(500).body(Map.of("error", "Internal server error"));
+    try {
+        String email = request.getEmail();
+
+        if (email == null || !isValidEmail(email)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid email format"));
         }
+
+        boolean success = emailVerificationService.sendVerificationEmail(email);
+
+        if (success) {
+            return ResponseEntity.ok(
+                    Map.of("message", "Verification email sent successfully", "email", email)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to send verification email - please check your API configuration"));
+        }
+
+    } catch (IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("error", ex.getMessage()));
+
+    } catch (Exception e) {
+        log.error("Error sending verification email: ", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Internal server error"));
     }
+}
 
     @PostMapping("/submit")
 public ResponseEntity<?> sendTestSubmittedMail(
