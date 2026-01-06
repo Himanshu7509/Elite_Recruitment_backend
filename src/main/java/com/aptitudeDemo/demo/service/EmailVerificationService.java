@@ -44,7 +44,7 @@ public class EmailVerificationService {
 
       if(studentFormRepository.existsByPermanentEmail(email)){
         log.warn("Attempt to verify already registered email: {}", email);
-        throw new IllegalArgumentException("Email already registered");
+        throw new IllegalStateException("Email already registered");
       }
       
     try {
