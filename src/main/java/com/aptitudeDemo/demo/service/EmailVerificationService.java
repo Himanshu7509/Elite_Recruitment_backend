@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import com.aptitudeDemo.demo.repository.StudentFormRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -20,11 +22,14 @@ public class EmailVerificationService {
     @Qualifier("brevoWebClient")
     private RestClient brevoWebClient;
     
-    @Value("${brevo.sender.email:hello@eliterecruitment.com}")
+    @Value("${brevo.sender.email:support@eliteassociate.in}")
     private String senderEmail;
     
     @Value("${brevo.sender.name:Elite Recruitment}")
     private String senderName;
+
+    @Autowired
+    private StudentFormRepository studentFormRepository;
 
 
 
@@ -36,6 +41,12 @@ public class EmailVerificationService {
     private static final long TOKEN_EXPIRY_TIME = 24 * 60 * 60 * 1000;
 
     public boolean sendVerificationEmail(String email) {
+
+      if(studentFormRepository.existsByPermanentEmail(email)){
+        log.warn("Attempt to verify already registered email: {}", email);
+        throw new IllegalArgumentException("Email already registered");
+      }
+      
     try {
         // Generate OTP
         String verificationCode = generateVerificationCode();
