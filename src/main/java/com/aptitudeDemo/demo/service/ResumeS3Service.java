@@ -14,6 +14,7 @@ import com.aptitudeDemo.demo.dto.student.ResumeUploadResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptitudeDemo.demo.model.student.Resume;
+import com.aptitudeDemo.demo.repository.ResumeRepository;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -28,6 +29,9 @@ public class ResumeS3Service {
 
     @Autowired
     private S3Client s3Client;
+
+    @Autowired
+    private ResumeRepository resumeRepository;
 
     private static final String RESUME_FOLDER = "resumes/student/";
 
