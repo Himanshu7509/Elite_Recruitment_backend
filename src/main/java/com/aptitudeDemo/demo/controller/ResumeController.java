@@ -16,7 +16,6 @@ import com.aptitudeDemo.demo.service.ResumeS3Service;
 
 @RestController
 @RequestMapping("/api/resume")
-@CrossOrigin
 public class ResumeController {
 
     @Autowired
