@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,4 +32,11 @@ public class ResumeController {
 
         return ResponseEntity.ok("Resume uploaded successfully");
     }
+
+    @GetMapping("/{studentId}")
+    public ResponseEntity<?> getResumeByStudentId(@PathVariable String studentId){
+    return resumeS3Service.getResume(studentId);
+    }
 }
+
+
