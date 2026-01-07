@@ -72,6 +72,21 @@ public class ResumeS3Service {
 
     }
 
+    public ResponseEntity<?> getResume(String studentId) {
+
+    Optional<Resume> resumeOpt = resumeRepository.findByStudentId(studentId);
+
+    if (resumeOpt.isEmpty()) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("Resume not found");
+    }
+
+    Resume resume = resumeOpt.get();
+
+    return ResponseEntity.ok(resume);
+}
+
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new RuntimeException("Resume file is empty");
