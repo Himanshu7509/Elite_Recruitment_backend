@@ -15,7 +15,7 @@ import com.aptitudeDemo.demo.service.ResumeS3Service;
 
 
 @RestController
-@RequestMapping("/api/resume")
+@RequestMapping("/resume")
 public class ResumeController {
 
     @Autowired
