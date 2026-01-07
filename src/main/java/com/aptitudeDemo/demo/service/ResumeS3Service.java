@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.aptitudeDemo.demo.dto.student.ResumeUploadResponse;
 
@@ -36,7 +37,7 @@ public class ResumeS3Service {
     private ResumeRepository resumeRepository;
 
     private static final String RESUME_FOLDER = "AptitudeTest/resume";
-
+    
     public void uploadAndSaveResume(
             MultipartFile file,
             String studentId
@@ -73,21 +74,39 @@ public class ResumeS3Service {
         resumeRepository.save(resume);
 
     }
+    
+    public Resume getResumeByStudentId(String studentId) {
 
-    public ResponseEntity<?> getResume(String studentId) {
+        return resumeRepository.findByStudentId(studentId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Resume not found for studentId: " + studentId
+                        )
+                );
+    }
+    
+    public void deleteResumeByStudentId(String studentId) {
 
-    Optional<Resume> resumeOpt = resumeRepository.findByStudentId(studentId);
+        Resume resume = resumeRepository.findByStudentId(studentId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Resume not found for studentId: " + studentId
+                        )
+                );
 
-    if (resumeOpt.isEmpty()) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("Resume not found");
+        // Delete from S3
+        DeleteObjectRequest deleteRequest =
+                DeleteObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(resume.getS3Key())
+                        .build();
+
+        s3Client.deleteObject(deleteRequest);
+
+        // Delete from MongoDB
+        resumeRepository.delete(resume);
     }
 
-    Resume resume = resumeOpt.get();
-
-    return ResponseEntity.ok(resume);
-}
 
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {

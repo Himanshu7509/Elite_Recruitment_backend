@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,12 @@ public class ResumeController {
     @GetMapping("/{studentId}")
     public ResponseEntity<?> getResumeByStudentId(@PathVariable String studentId){
     return resumeS3Service.getResume(studentId);
+    }
+    
+    @DeleteMapping("/{studentId}")
+    public ResponseEntity<String> deleteResume(@PathVariable String studentId) {
+        resumeS3Service.deleteResumeByStudentId(studentId);
+        return ResponseEntity.ok("Resume deleted successfully");
     }
 }
 
