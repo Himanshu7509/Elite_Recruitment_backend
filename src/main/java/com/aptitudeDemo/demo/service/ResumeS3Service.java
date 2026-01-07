@@ -66,6 +66,7 @@ public class ResumeS3Service {
         Resume resume = new Resume();
         resume.setS3Key(s3Key);
         resume.setResumeUrl(resumeUrl);
+        resume.setStudentId(studentId);
         
         resumeRepository.save(resume);
 
