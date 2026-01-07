@@ -33,17 +33,6 @@ public class ResumeController {
 
         return ResponseEntity.ok("Resume uploaded successfully");
     }
-
-    @GetMapping("/{studentId}")
-    public ResponseEntity<?> getResumeByStudentId(@PathVariable String studentId){
-    return resumeS3Service.getResume(studentId);
-    }
-    
-    @DeleteMapping("/{studentId}")
-    public ResponseEntity<String> deleteResume(@PathVariable String studentId) {
-        resumeS3Service.deleteResumeByStudentId(studentId);
-        return ResponseEntity.ok("Resume deleted successfully");
-    }
 }
 
 

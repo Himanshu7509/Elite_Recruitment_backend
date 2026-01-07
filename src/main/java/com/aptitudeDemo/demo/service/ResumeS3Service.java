@@ -74,39 +74,6 @@ public class ResumeS3Service {
         resumeRepository.save(resume);
 
     }
-    
-    public Resume getResumeByStudentId(String studentId) {
-
-        return resumeRepository.findByStudentId(studentId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Resume not found for studentId: " + studentId
-                        )
-                );
-    }
-    
-    public void deleteResumeByStudentId(String studentId) {
-
-        Resume resume = resumeRepository.findByStudentId(studentId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Resume not found for studentId: " + studentId
-                        )
-                );
-
-        // Delete from S3
-        DeleteObjectRequest deleteRequest =
-                DeleteObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(resume.getS3Key())
-                        .build();
-
-        s3Client.deleteObject(deleteRequest);
-
-        // Delete from MongoDB
-        resumeRepository.delete(resume);
-    }
-
 
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
