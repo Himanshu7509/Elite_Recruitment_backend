@@ -23,13 +23,13 @@ public class ResumeController {
     @Autowired
     private ResumeS3Service resumeS3Service;
 
-    @PostMapping("/upload/{studentId}")
+    @PostMapping("/upload/{email}")
     public ResponseEntity<?> uploadResume(
-            @PathVariable String studentId,
+            @PathVariable String email,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        resumeS3Service.uploadAndSaveResume(file, studentId);
+        resumeS3Service.uploadAndSaveResume(file, email);
 
         return ResponseEntity.ok("Resume uploaded successfully");
     }

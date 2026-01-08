@@ -12,4 +12,6 @@ import com.aptitudeDemo.demo.model.student.Resume;
 public interface ResumeRepository extends MongoRepository<Resume, String> {
 
     Optional<Resume> findByStudentId(String studentId);
+
+     Optional<Resume> findByEmail(String email);
 }

@@ -9,11 +9,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.aptitudeDemo.demo.dto.student.ResumeUploadResponse;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptitudeDemo.demo.model.student.Resume;
@@ -40,13 +35,15 @@ public class ResumeS3Service {
     
     public void uploadAndSaveResume(
             MultipartFile file,
-            String studentId
+            String email
     ) throws IOException {
 
         validateFile(file);
 
+        String safeEmail=email.replace("@","_").replace(".","_");
+
         String s3Key = RESUME_FOLDER
-                + studentId + "-"
+                + safeEmail + "-"
                 + UUID.randomUUID()
                 + "-" + file.getOriginalFilename();
 
@@ -69,7 +66,7 @@ public class ResumeS3Service {
         Resume resume = new Resume();
         resume.setS3Key(s3Key);
         resume.setResumeUrl(resumeUrl);
-        resume.setStudentId(studentId);
+        resume.setEmail(email);
         
         resumeRepository.save(resume);
 
