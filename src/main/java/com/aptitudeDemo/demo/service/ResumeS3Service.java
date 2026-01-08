@@ -16,6 +16,7 @@ import com.aptitudeDemo.demo.repository.ResumeRepository;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 
@@ -38,7 +39,18 @@ public class ResumeS3Service {
             String email
     ) throws IOException {
 
+        validateEmail(email);
         validateFile(file);
+
+        resumeRepository.findByEmail(email).ifPresent(existingResume -> {
+            s3Client.deleteObject(
+                    DeleteObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(existingResume.getS3Key())
+                            .build()
+            );
+            resumeRepository.delete(existingResume);
+        });
 
         String safeEmail=email.replace("@","_").replace(".","_");
 
@@ -70,6 +82,19 @@ public class ResumeS3Service {
         
         resumeRepository.save(resume);
 
+    }
+
+    private void validateEmail(String email) {
+
+        if (email == null || email.isBlank()) {
+            throw new RuntimeException("Email cannot be empty");
+        }
+
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+
+        if (!email.matches(emailRegex)) {
+            throw new RuntimeException("Invalid email format");
+        }
     }
 
     private void validateFile(MultipartFile file) {
