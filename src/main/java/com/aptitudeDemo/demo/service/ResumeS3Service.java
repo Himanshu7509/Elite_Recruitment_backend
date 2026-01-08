@@ -141,6 +141,10 @@ public class ResumeS3Service {
 
     resumeRepository.delete(resume);
 }
+    
+    public List<Resume> getAllResumes() {
+    return resumeRepository.findAll();
+}
 
 
 }

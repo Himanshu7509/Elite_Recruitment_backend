@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,13 @@ public class ResumeController {
         resumeS3Service.deleteResumeByEmail(email);
         return ResponseEntity.ok("Resume deleted successfully");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Resume>> getAllResumes() {
+    return ResponseEntity.ok(
+            resumeS3Service.getAllResumes()
+    );
+}
 }
 
 
