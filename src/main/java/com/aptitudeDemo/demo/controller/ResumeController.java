@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aptitudeDemo.demo.model.student.Resume;
 import com.aptitudeDemo.demo.service.ResumeS3Service;
 
 
@@ -32,6 +33,23 @@ public class ResumeController {
         resumeS3Service.uploadAndSaveResume(file, email);
 
         return ResponseEntity.ok("Resume uploaded successfully");
+    }
+
+     @GetMapping("/email/{email}")
+    public ResponseEntity<Resume> getResumeByEmail(
+            @PathVariable String email
+    ) {
+        return ResponseEntity.ok(
+                resumeS3Service.getResumeByEmail(email)
+        );
+    }
+
+    @DeleteMapping("/email/{email}")
+    public ResponseEntity<String> deleteResumeByEmail(
+            @PathVariable String email
+    ) {
+        resumeS3Service.deleteResumeByEmail(email);
+        return ResponseEntity.ok("Resume deleted successfully");
     }
 }
 

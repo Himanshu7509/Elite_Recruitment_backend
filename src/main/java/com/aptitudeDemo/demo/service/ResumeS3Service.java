@@ -114,4 +114,33 @@ public class ResumeS3Service {
             throw new RuntimeException("Only PDF, DOC, DOCX allowed");
         }
     }
+
+    public Resume getResumeByEmail(String email) {
+
+    validateEmail(email);
+
+    return resumeRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new RuntimeException("Resume not found for email: " + email));
+    }
+
+    public void deleteResumeByEmail(String email) {
+
+    validateEmail(email);
+
+    Resume resume = resumeRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new RuntimeException("Resume not found for email: " + email));
+
+    s3Client.deleteObject(
+            DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(resume.getS3Key())
+                    .build()
+    );
+
+    resumeRepository.delete(resume);
+}
+
+
 }
