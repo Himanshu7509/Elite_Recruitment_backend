@@ -33,7 +33,7 @@ public class StudentForm {
     private String permanentPin;
     private String permanentPhone;
 
-    @Indexed(unique=true)
+   // @Indexed(unique=true)
     private String permanentEmail;
 
     private String reference1Name;
