@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.model.student;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +14,9 @@ public class Feedback {
 
     @Id
     private String id;
+
+    @Indexed
+    private String studentFormId;
 
     private int rating;
     private String name;

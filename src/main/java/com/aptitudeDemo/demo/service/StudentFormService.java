@@ -9,11 +9,21 @@ import org.springframework.stereotype.Service;
 
 import com.aptitudeDemo.demo.dto.student.EducationRecordDto;
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
+import com.aptitudeDemo.demo.dto.student.StudentProfileResponse;
 import com.aptitudeDemo.demo.dto.student.WorkExperienceDto;
+import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.model.student.EducationRecord;
+import com.aptitudeDemo.demo.model.student.Feedback;
+import com.aptitudeDemo.demo.model.student.Result;
+import com.aptitudeDemo.demo.model.student.Resume;
 import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.model.student.WorkExperience;
 import com.aptitudeDemo.demo.repository.StudentFormRepository;
+import com.aptitudeDemo.demo.repository.FeedbackRepository;
+import com.aptitudeDemo.demo.repository.ResultRepository;
+import com.aptitudeDemo.demo.repository.ResumeRepository;
+import com.aptitudeDemo.demo.repository.QuestionsRepository;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +33,19 @@ public class StudentFormService {
 
     @Autowired
     private StudentFormRepository studentFormRepository;
+    
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private ResultRepository resultRepository;
+
+    @Autowired
+    private ResumeRepository resumeRepository;
+
+    @Autowired
+    private QuestionsRepository questionsRepository;
+
 
     public StudentForm saveStudentForm(StudentFormRequest studentFormRequest) {
         log.info("Saving student form for: {}", studentFormRequest.getFullName());
@@ -101,6 +124,40 @@ public class StudentFormService {
         }
         return false;
     }
+    
+    public StudentProfileResponse getByStudentFormId(String studentFormId) {
+
+        log.info("Fetching complete profile for studentFormId: {}", studentFormId);
+
+        StudentForm studentForm = studentFormRepository
+                .findById(studentFormId)
+                .orElseThrow(() -> new RuntimeException("StudentForm not found"));
+
+        Feedback feedback = feedbackRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
+
+        Result result = resultRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
+
+        Resume resume = resumeRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
+
+        Questions questions = questionsRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
+
+        return new StudentProfileResponse(
+                studentForm,
+                feedback,
+                result,
+                resume,
+                questions
+        );
+    }
+
     
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {
         if (educationRecordDtos == null) {

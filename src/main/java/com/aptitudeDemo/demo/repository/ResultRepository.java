@@ -9,5 +9,6 @@ import com.aptitudeDemo.demo.model.student.Result;
 public interface ResultRepository extends MongoRepository<Result,String> {
 
     Optional<Result> findByFullName(String fullName);
-    
+    Optional<Result> findByStudentFormId(String studentFormId);
+
 }

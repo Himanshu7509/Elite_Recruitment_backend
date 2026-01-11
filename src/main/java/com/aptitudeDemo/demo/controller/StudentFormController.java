@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
+import com.aptitudeDemo.demo.dto.student.StudentProfileResponse;
 import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
@@ -38,6 +39,16 @@ public class StudentFormController {
 
     @Autowired
     private StudentFormService studentFormService;
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentProfileResponse> getStudentById(
+            @PathVariable("id") String studentFormId) {
+
+        return ResponseEntity.ok(
+            studentFormService.getByStudentFormId(studentFormId)
+        );
+    }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<StudentForm>> getAllStudents() {
