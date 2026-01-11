@@ -7,16 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection="Result")
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection="Result")
 public class Result {
 
     @Id
     private String id;
 
-    
     private String studentFormId;
     
     private String fullName;
