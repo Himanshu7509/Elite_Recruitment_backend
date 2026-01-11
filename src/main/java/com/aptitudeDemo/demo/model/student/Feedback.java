@@ -14,7 +14,6 @@ public class Feedback {
     @Id
     private String id;
 
-    
     private String studentFormId;
 
     private int rating;
