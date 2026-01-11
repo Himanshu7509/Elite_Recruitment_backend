@@ -18,10 +18,10 @@ public class QuestionsService {
     
     public Questions create(QuestionsRequest request) {
         Questions entity = new Questions(
-                null,
+        		null,
                 request.getEmail(),
                 request.getFullName(),
-                request.getQuestions()
+                null, request.getQuestions()
         );
         return repository.save(entity);
     }

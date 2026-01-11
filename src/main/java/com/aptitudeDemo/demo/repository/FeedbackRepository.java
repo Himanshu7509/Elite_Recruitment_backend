@@ -8,4 +8,7 @@ import com.aptitudeDemo.demo.model.student.Feedback;
 
 public interface FeedbackRepository extends MongoRepository<Feedback, String> {
     Optional<Feedback> findByName(String name);
+
+    Optional<Feedback> findByStudentFormId(String studentFormId);
+
 }
