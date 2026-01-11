@@ -133,32 +133,15 @@ public class StudentFormService {
                 .findById(studentFormId)
                 .orElseThrow(() -> new RuntimeException("StudentForm not found"));
 
-        Feedback feedback = feedbackRepository
-                .findByStudentFormId(studentFormId)
-                .orElse(null);
-
-        Result result = resultRepository
-                .findByStudentFormId(studentFormId)
-                .orElse(null);
-
-        Resume resume = resumeRepository
-                .findByStudentFormId(studentFormId)
-                .orElse(null);
-
-        Questions questions = questionsRepository
-                .findByStudentFormId(studentFormId)
-                .orElse(null);
-
-        return new StudentProfileResponse(
-                studentForm,
-                feedback,
-                result,
-                resume,
-                questions
-        );
-    }
-
+    return new StudentProfileResponse(
+            studentForm,
+            feedbackRepository.findByStudentFormId(studentFormId).orElse(null),
+            resultRepository.findByStudentFormId(studentFormId).orElse(null),
+            resumeRepository.findByStudentFormId(studentFormId).orElse(null),
+            questionsRepository.findByStudentFormId(studentFormId).orElse(null)
+    );
     
+}   
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {
         if (educationRecordDtos == null) {
             return new ArrayList<>();
