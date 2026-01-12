@@ -28,7 +28,7 @@ public class ResumeController {
     @PostMapping("/{studentFormId}")
     public ResponseEntity<?> uploadResume(
             @PathVariable String studentFormId,
-            @RequestParam MultipartFile file,
+            @RequestParam ("file") MultipartFile file,
             @RequestParam String email
     ) throws IOException {
 
