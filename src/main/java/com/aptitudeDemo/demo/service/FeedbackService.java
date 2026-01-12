@@ -18,11 +18,19 @@ public class FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    public Feedback saveFeedback(FeedbackReq feedbackReq) {
+    public Feedback saveFeedback(String studentFormId, FeedbackReq feedbackReq) {
+    	
+    	if (studentFormId == null || studentFormId.isBlank()) {
+            throw new IllegalArgumentException("studentFormId is mandatory");
+        }
+    	
         log.info("Saving form feedback for: {}", feedbackReq.getRating());
         
         
         Feedback feedback = new Feedback();
+        
+        feedback.setStudentFormId(studentFormId);
+        
         feedback.setName(feedbackReq.getName());
         feedback.setRating(feedbackReq.getRating());
         feedback.setProblem1(feedbackReq.getProblem1());
