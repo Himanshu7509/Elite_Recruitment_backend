@@ -44,7 +44,7 @@ public class ResultController {
         }
     }
     
-    @PostMapping("/result/{studentFormId}")
+    @PostMapping("/{studentFormId}")
     public ResponseEntity<Result> saveResult(
             @PathVariable String studentFormId,
             @RequestBody ResultReq req) {
