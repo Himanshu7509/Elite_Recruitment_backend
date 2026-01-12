@@ -22,10 +22,10 @@ public class EmailVerificationService {
     @Qualifier("brevoWebClient")
     private RestClient brevoWebClient;
     
-    @Value("${brevo.sender.email:support@eliteassociate.in}")
+    @Value("${brevo.sender.email}")
     private String senderEmail;
     
-    @Value("${brevo.sender.name:Elite Recruitment}")
+    @Value("${brevo.sender.name}")
     private String senderName;
 
     @Autowired
