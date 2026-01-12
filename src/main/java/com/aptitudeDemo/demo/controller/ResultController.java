@@ -44,6 +44,16 @@ public class ResultController {
         }
     }
     
+    @PostMapping("/result/{studentFormId}")
+    public ResponseEntity<Result> saveResult(
+            @PathVariable String studentFormId,
+            @RequestBody ResultReq req) {
+
+        return ResponseEntity.ok(
+                resultService.saveResult(studentFormId, req)
+        );
+    }
+    /*
     @PostMapping("/submit")
     public ResponseEntity<?> submitResult(@RequestBody ResultReq resultReq) {
         
@@ -58,5 +68,6 @@ public class ResultController {
             return ResponseEntity.status(500).body("Error saving student form: " + e.getMessage());
         }
     }
+    */
 
 }

@@ -19,12 +19,23 @@ public class ResultService {
     @Autowired
     private ResultRepository resultRepository;
 
-    public Result saveResult(ResultReq resultReq){
+    public Result saveResult(String studentFormId, ResultReq resultReq){
 
         Result result = new Result();
+        result.setStudentFormId(studentFormId);
         result.setFullName(resultReq.getFullName());
         result.setCorrectAnswer(resultReq.getCorrectAnswer());
-        return resultRepository.save(result);
+        Result saved = resultRepository.save(result);
+        
+        log.info("Saved result for studentFormId: {}", studentFormId);
+
+        return saved;
+    }
+    
+    public Result getByStudentFormId(String studentFormId) {
+        return resultRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
     }
 
     public int correctAnswerByName(String fullName) {
