@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Document(collection = "ai_questions")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data 
+@AllArgsConstructor 
+@NoArgsConstructor
 public class Questions {
     
     
