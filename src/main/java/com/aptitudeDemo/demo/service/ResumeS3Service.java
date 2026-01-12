@@ -36,7 +36,8 @@ public class ResumeS3Service {
     
     public void uploadAndSaveResume(
             MultipartFile file,
-            String email
+            String email,
+            String studentFormId
     ) throws IOException {
 
         validateEmail(email);
@@ -76,6 +77,7 @@ public class ResumeS3Service {
                 + ".amazonaws.com/" + s3Key;
 
         Resume resume = new Resume();
+        resume.setStudentFormId(studentFormId);
         resume.setS3Key(s3Key);
         resume.setResumeUrl(resumeUrl);
         resume.setEmail(email);
@@ -84,6 +86,11 @@ public class ResumeS3Service {
 
     }
 
+    public Resume getResumeByStudentFormId(String studentFormId) {
+        return resumeRepository.findByStudentFormId(studentFormId)
+                .orElse(null);
+    }
+    
     private void validateEmail(String email) {
 
         if (email == null || email.isBlank()) {
