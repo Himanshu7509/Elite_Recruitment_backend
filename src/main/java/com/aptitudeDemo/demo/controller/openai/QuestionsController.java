@@ -29,7 +29,16 @@ public class QuestionsController {
     public QuestionsController(QuestionsService service) {
         this.service = service;
     }
-
+    
+    @PostMapping("/{studentFormId}")
+    public ResponseEntity<?> createQuestions(
+            @PathVariable String studentFormId,
+            @RequestBody QuestionsRequest request
+    ) {
+        service.create(studentFormId, request);
+        return ResponseEntity.ok("Questions saved successfully");
+    }
+/*
     @PostMapping("/submit")
     public ResponseEntity<Questions> create(
             @RequestBody QuestionsRequest request) {
@@ -64,4 +73,5 @@ public class QuestionsController {
         service.delete(id);
         return ResponseEntity.ok("Deleted successfully");
     }
+    */
 }

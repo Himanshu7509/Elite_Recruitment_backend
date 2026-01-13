@@ -16,17 +16,22 @@ public class QuestionsService {
     private QuestionsRepository repository;
 
     
-    public Questions create(QuestionsRequest request) {
-        Questions entity = new Questions(
-        		null,
-                request.getEmail(),
-                request.getFullName(),
-                null, request.getQuestions()
-        );
-        return repository.save(entity);
+    public Questions create(String studentFormId, QuestionsRequest request){
+    	
+    	repository.findByStudentFormId(studentFormId)
+        .ifPresent(existing -> repository.delete(existing));
+    	
+        Questions entity = new Questions();
+        		entity.setStudentFormId(studentFormId);
+        		entity.setEmail(request.getEmail());
+        		entity.setFullName(request.getFullName());
+        		entity.setQuestions(request.getQuestions());
+        		
+        		return repository.save(entity);
+        
     }
-    public Questions update(String id, QuestionsRequest request) {
-        Questions existing = repository.findById(id)
+    public Questions updateByStudentFormId(String studentFormId, QuestionsRequest request) {
+        Questions existing = repository.findByStudentFormId(studentFormId)
                 .orElseThrow(() -> new RuntimeException("Questions not found"));
 
         existing.setEmail(request.getEmail());
@@ -36,13 +41,8 @@ public class QuestionsService {
         return repository.save(existing);
     }
 
-    public void delete(String id) {
-        repository.deleteById(id);
-    }
-
-    public Questions getById(String id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Questions not found"));
+    public Questions getByStudentFormId(String studentFormId) {
+        return repository.findByStudentFormId(studentFormId).orElse(null);
     }
 
     public List<Questions> getAll() {
