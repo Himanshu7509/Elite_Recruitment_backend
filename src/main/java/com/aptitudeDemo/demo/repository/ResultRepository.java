@@ -12,5 +12,7 @@ public interface ResultRepository extends MongoRepository<Result,String> {
 
     Optional<Result> findByFullName(String fullName);
     Optional<Result> findByStudentFormId(String studentFormId);
+    
+    void deleteByStudentFormId(String studentFormId);
 
 }

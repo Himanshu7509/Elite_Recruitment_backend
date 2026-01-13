@@ -14,5 +14,7 @@ public interface QuestionsRepository extends MongoRepository<Questions, String> 
     List<Questions> findByEmail(String email);
 
     Optional<Questions> findByStudentFormId(String studentFormId);
+    
+    void deleteByStudentFormId(String studentFormId);
 
 }
