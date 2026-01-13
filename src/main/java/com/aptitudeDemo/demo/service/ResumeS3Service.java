@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -36,27 +37,25 @@ public class ResumeS3Service {
     
     public void uploadAndSaveResume(
             MultipartFile file,
-            String email,
             String studentFormId
     ) throws IOException {
-
-        validateEmail(email);
+    	
+    	validateStudentFormId(studentFormId);
         validateFile(file);
 
-        resumeRepository.findByEmail(email).ifPresent(existingResume -> {
+        resumeRepository.findByStudentFormId(studentFormId).ifPresent(existing -> {
             s3Client.deleteObject(
                     DeleteObjectRequest.builder()
                             .bucket(bucketName)
-                            .key(existingResume.getS3Key())
+                            .key(existing.getS3Key())
                             .build()
             );
-            resumeRepository.delete(existingResume);
+            resumeRepository.delete(existing);
         });
 
-        String safeEmail=email.replace("@","_").replace(".","_");
-
+        
         String s3Key = RESUME_FOLDER
-                + safeEmail + "-"
+                + studentFormId + "-"
                 + UUID.randomUUID()
                 + "-" + file.getOriginalFilename();
 
@@ -80,29 +79,23 @@ public class ResumeS3Service {
         resume.setStudentFormId(studentFormId);
         resume.setS3Key(s3Key);
         resume.setResumeUrl(resumeUrl);
-        resume.setEmail(email);
+        resume.setUploadedAt(LocalDateTime.now());
         
         resumeRepository.save(resume);
 
     }
-
+    
     public Resume getResumeByStudentFormId(String studentFormId) {
         return resumeRepository.findByStudentFormId(studentFormId)
                 .orElse(null);
     }
     
-    private void validateEmail(String email) {
-
-        if (email == null || email.isBlank()) {
-            throw new RuntimeException("Email cannot be empty");
-        }
-
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-
-        if (!email.matches(emailRegex)) {
-            throw new RuntimeException("Invalid email format");
+    private void validateStudentFormId(String studentFormId) {
+        if (studentFormId == null || studentFormId.isBlank()) {
+            throw new RuntimeException("studentFormId cannot be empty");
         }
     }
+
 
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
@@ -121,37 +114,5 @@ public class ResumeS3Service {
             throw new RuntimeException("Only PDF, DOC, DOCX allowed");
         }
     }
-
-    public Resume getResumeByEmail(String email) {
-
-    validateEmail(email);
-
-    return resumeRepository.findByEmail(email)
-            .orElseThrow(() ->
-                    new RuntimeException("Resume not found for email: " + email));
-    }
-
-    public void deleteResumeByEmail(String email) {
-
-    validateEmail(email);
-
-    Resume resume = resumeRepository.findByEmail(email)
-            .orElseThrow(() ->
-                    new RuntimeException("Resume not found for email: " + email));
-
-    s3Client.deleteObject(
-            DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(resume.getS3Key())
-                    .build()
-    );
-
-    resumeRepository.delete(resume);
-}
-    
-    public List<Resume> getAllResumes() {
-    return resumeRepository.findAll();
-}
-
 
 }

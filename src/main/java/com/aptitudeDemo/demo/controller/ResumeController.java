@@ -28,11 +28,10 @@ public class ResumeController {
     @PostMapping("/{studentFormId}")
     public ResponseEntity<?> uploadResume(
             @PathVariable String studentFormId,
-            @RequestParam ("file") MultipartFile file,
-            @RequestParam String email
+            @RequestParam ("file") MultipartFile file
     ) throws IOException {
 
-        resumeS3Service.uploadAndSaveResume(file, email, studentFormId);
+        resumeS3Service.uploadAndSaveResume(file, studentFormId);
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
@@ -48,7 +47,7 @@ public class ResumeController {
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
-*/
+
      @GetMapping("/email/{email}")
     public ResponseEntity<Resume> getResumeByEmail(
             @PathVariable String email
@@ -72,6 +71,7 @@ public class ResumeController {
             resumeS3Service.getAllResumes()
     );
 }
+*/
 }
 
 
