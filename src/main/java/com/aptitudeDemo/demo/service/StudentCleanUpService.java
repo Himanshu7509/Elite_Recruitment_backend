@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.aptitudeDemo.demo.repository.*;
@@ -18,7 +19,7 @@ public class StudentCleanUpService {
     @Autowired private ResumeRepository resumeRepository;
     @Autowired private S3Client s3Client;
 
-    @Autowired
+    @Value("${aws.s3.bucket-name}")
     private String bucketName;
 
     public void deleteAllByStudentFormId(String studentFormId) {
