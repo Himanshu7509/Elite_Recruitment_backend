@@ -23,7 +23,6 @@ public class Resume {
   
     private String s3Key;     
     private String resumeUrl;
-    private String email;
 
     private LocalDateTime uploadedAt;
 }
