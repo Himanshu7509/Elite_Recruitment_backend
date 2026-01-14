@@ -33,7 +33,7 @@ public class OpenAiService {
         this.openAiRestClient = openAiRestClient;
     }
 
-    public String generateTest(TestRequest request) throws Exception {
+    public Object generateTest(TestRequest request) throws Exception {
 
         String userPrompt = buildUserPrompt(request);
 
@@ -52,12 +52,20 @@ public class OpenAiService {
                 .retrieve()
                 .body(Map.class);
 
-        return ((Map) ((Map)
+        String content = ((Map) ((Map)
                 ((List) response.get("choices"))
                         .get(0))
                 .get("message"))
                 .get("content")
                 .toString();
+        
+        // Parse the JSON string to return as an object
+        try {
+            return objectMapper.readValue(content, Object.class);
+        } catch (Exception e) {
+            // If parsing fails, return the raw string
+            return content;
+        }
     }
 
     private String buildUserPrompt(TestRequest request) throws Exception {
