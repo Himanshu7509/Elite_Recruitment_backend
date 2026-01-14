@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.aptitudeDemo.demo.dto.student.DashboardDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
-import com.aptitudeDemo.demo.dto.student.StudentProfileResponse;
 import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
@@ -32,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/auth/student")
 public class StudentFormController {
-
     
     @Autowired
     private OpenAiService openAiService;
@@ -40,15 +40,6 @@ public class StudentFormController {
     @Autowired
     private StudentFormService studentFormService;
     
-    @GetMapping("/{id}")
-    public ResponseEntity<StudentProfileResponse> getStudentById(
-            @PathVariable("id") String studentFormId) {
-
-        return ResponseEntity.ok(
-            studentFormService.getByStudentFormId(studentFormId)
-        );
-    }
-
 
     @GetMapping("/all")
     public ResponseEntity<List<StudentForm>> getAllStudents() {
@@ -84,30 +75,37 @@ public class StudentFormController {
             log.info("Successfully saved student form with ID: {}", savedForm.getId());
             
            
-            return ResponseEntity.ok(
-                openAiService.generateTest(new TestRequest(
-                    new CandidateProfile(
-                        studentFormRequest.getPostAppliedFor(),
-                        studentFormRequest.getExperienceLevel(),
-                        studentFormRequest.getYearsOfExperience(),
-                        studentFormRequest.getPrimarySkills(),
-                        studentFormRequest.getSecondarySkills()
+            String aiGeneratedTest = openAiService.generateTest(new TestRequest(
+                new CandidateProfile(
+                    studentFormRequest.getPostAppliedFor(),
+                    studentFormRequest.getExperienceLevel(),
+                    studentFormRequest.getYearsOfExperience(),
+                    studentFormRequest.getPrimarySkills(),
+                    studentFormRequest.getSecondarySkills()
+                ),
+                new TestRequirements(
+                    15
+                    ,
+                    new DifficultyDistribution(
+                        33,
+                        34,
+                        33
                     ),
-                    new TestRequirements(
-                        15
-                        ,
-                        new DifficultyDistribution(
-                            33,
-                            34,
-                            33
-                        ),
-                        "MCQ"
+                    "MCQ"
     
-                    ),
-                    "JSON"
+                ),
+                "JSON"
     
-                ))
+            ));
+            
+            // Return both the AI-generated test and the saved form ID
+            Map<String, Object> response = Map.of(
+                "testData", aiGeneratedTest,
+                "studentFormId", savedForm.getId(),
+                "message", "Student form submitted successfully and test generated"
             );
+            
+            return ResponseEntity.ok(response);
 
             } catch (IllegalStateException e) {
         // ✅ Duplicate email case
