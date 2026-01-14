@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.aptitudeDemo.demo.dto.student.DashboardDTO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class StudentFormController {
             log.info("Successfully saved student form with ID: {}", savedForm.getId());
             
            
-            String aiGeneratedTest = openAiService.generateTest(new TestRequest(
+            Object aiGeneratedTest = openAiService.generateTest(new TestRequest(
                 new CandidateProfile(
                     studentFormRequest.getPostAppliedFor(),
                     studentFormRequest.getExperienceLevel(),
