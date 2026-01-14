@@ -33,7 +33,7 @@ public class ResumeS3Service {
     @Autowired
     private ResumeRepository resumeRepository;
 
-    private static final String RESUME_FOLDER = "AptitudeTest/resume";
+    private static final String RESUME_FOLDER = "AptitudeTest/resume/";
     
     public void uploadAndSaveResume(
             MultipartFile file,
