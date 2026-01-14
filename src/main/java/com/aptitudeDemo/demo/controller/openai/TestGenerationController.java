@@ -19,7 +19,7 @@ public class TestGenerationController {
     }
 
     @PostMapping("/generate")
-    public String generateTest(@RequestBody TestRequest request) throws Exception {
+    public Object generateTest(@RequestBody TestRequest request) throws Exception {
         return openAiService.generateTest(request);
     }
 }
