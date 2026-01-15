@@ -33,7 +33,7 @@ public class ResultController {
         return ResponseEntity.ok(results);
     }
     
-    @GetMapping("/student/{studentFormId}")
+    @GetMapping("/{studentFormId}")
     public ResponseEntity<?> getResultByStudentFormId(
             @PathVariable String studentFormId
     ) {
