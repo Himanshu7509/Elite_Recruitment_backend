@@ -33,15 +33,19 @@ public class ResultController {
         return ResponseEntity.ok(results);
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getResultById(@PathVariable String id) {
-        log.info("Received request to fetch result by ID: {}", id);
-        Optional<Result> result = resultService.getResultById(id);
-        if (result.isPresent()) {
-            return ResponseEntity.ok(result.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/student/{studentFormId}")
+    public ResponseEntity<?> getResultByStudentFormId(
+            @PathVariable String studentFormId
+    ) {
+        Result result = resultService.getByStudentFormId(studentFormId);
+
+        if (result == null) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Result not found for studentFormId: " + studentFormId);
         }
+
+        return ResponseEntity.ok(result);
     }
     
     @PostMapping("/{studentFormId}")
