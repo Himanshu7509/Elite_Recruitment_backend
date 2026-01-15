@@ -41,6 +41,16 @@ public class StudentFormController {
     @Autowired
     private StudentFormService studentFormService;
     
+    @GetMapping("/{studentFormId}")
+    public ResponseEntity<?> getStudentById(
+            @PathVariable String studentFormId
+    ) {
+
+        return ResponseEntity.ok(
+                studentFormService.getByStudentFormId(studentFormId)
+        );
+    }
+    
 
     @GetMapping("/all")
     public ResponseEntity<List<StudentForm>> getAllStudents() {
