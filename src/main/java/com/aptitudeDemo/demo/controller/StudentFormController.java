@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.aptitudeDemo.demo.dto.student.DashboardDTO;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,7 +112,7 @@ public class StudentFormController {
             // Return both the AI-generated test and the saved form ID
             Map<String, Object> response = Map.of(
                 "testData", aiGeneratedTest,
-                "id", savedForm.getId(),
+                "studentFormId", savedForm.getId(),
                 "message", "Student form submitted successfully and test generated"
             );
             
