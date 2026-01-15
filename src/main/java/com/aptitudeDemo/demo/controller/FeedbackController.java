@@ -41,6 +41,18 @@ public class FeedbackController {
                 feedbackService.saveFeedback(studentFormId, feedbackReq)
         );
     }
+
+    @GetMapping("/{studentFormId}")
+    public ResponseEntity<?> getFeedback(@PathVariable String studentFormId){
+        Feedback feedback = feedbackService.getFeedbackByStudentById(studentFormId);
+
+        if (feedback == null) {
+            return ResponseEntity
+                    .status(404)
+                    .body("feedback not found for studentFormId: " + studentFormId);
+        }
+        return ResponseEntity.ok(feedback);
+    }
     
     /*
     @PostMapping("/submit")

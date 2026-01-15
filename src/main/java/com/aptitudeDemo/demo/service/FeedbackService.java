@@ -44,6 +44,11 @@ public class FeedbackService {
         
         return savedFeedback;
     }
+
+    public Feedback getFeedbackByStudentById(String studentFormId){
+        return feedbackRepository.findByStudentFormId(studentFormId).orElse(null);
+    }
+    
     
     public List<Feedback> getAllFeedbacks() {
         log.info("Fetching all student forms");
