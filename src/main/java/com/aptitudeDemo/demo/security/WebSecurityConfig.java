@@ -41,7 +41,8 @@ public class WebSecurityConfig {
                     "/email-verification/**",
                     "/admin/email/**",
                     "/resume/**",
-                    "/student/**"
+                    "/student/**",
+                    "/auth/student/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
