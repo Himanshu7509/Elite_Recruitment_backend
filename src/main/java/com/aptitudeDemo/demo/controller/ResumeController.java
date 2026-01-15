@@ -1,11 +1,9 @@
 package com.aptitudeDemo.demo.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +31,21 @@ public class ResumeController {
 
         resumeS3Service.uploadAndSaveResume(file, studentFormId);
         return ResponseEntity.ok("Resume uploaded successfully");
+    }
+
+     @GetMapping("/{studentFormId}")
+    public ResponseEntity<?> getResumeByStudentFormId(
+            @PathVariable String studentFormId
+    ) {
+        Resume resume = resumeS3Service.getResumeByStudentFormId(studentFormId);
+
+        if (resume == null) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Resume not found for studentFormId: " + studentFormId);
+        }
+
+        return ResponseEntity.ok(resume);
     }
 
     /*
