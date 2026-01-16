@@ -22,7 +22,7 @@ public class ResumeController {
 
     @Autowired
     private ResumeS3Service resumeS3Service;
-   /* 
+    /*
     @PostMapping("/{studentFormId}")
     public ResponseEntity<?> uploadResume(
             @PathVariable String studentFormId,
@@ -60,31 +60,6 @@ public class ResumeController {
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
-/* 
-     @GetMapping("/email/{email}")
-    public ResponseEntity<Resume> getResumeByEmail(
-            @PathVariable String email
-    ) {
-        return ResponseEntity.ok(
-                resumeS3Service.getResumeByEmail(email)
-        );
-    }
-
-    @DeleteMapping("/email/{email}")
-    public ResponseEntity<String> deleteResumeByEmail(
-            @PathVariable String email
-    ) {
-        resumeS3Service.deleteResumeByEmail(email);
-        return ResponseEntity.ok("Resume deleted successfully");
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Resume>> getAllResumes() {
-    return ResponseEntity.ok(
-            resumeS3Service.getAllResumes()
-    );
-}
-*/
 }
 
 

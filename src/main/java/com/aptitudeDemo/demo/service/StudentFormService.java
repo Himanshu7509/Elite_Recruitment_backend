@@ -142,6 +142,23 @@ public class StudentFormService {
     );
     
 }   
+    
+    public StudentForm getStudentWithResume(String studentFormId) {
+
+        log.info("Fetching student form WITH resume for ID: {}", studentFormId);
+
+        StudentForm studentForm = studentFormRepository
+                .findById(studentFormId)
+                .orElseThrow(() -> new RuntimeException("StudentForm not found"));
+
+        Resume resume = resumeRepository
+                .findByStudentFormId(studentFormId)
+                .orElse(null);
+
+        studentForm.setResume(resume); // populate transient field
+
+        return studentForm;
+    }
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {
         if (educationRecordDtos == null) {
             return new ArrayList<>();
