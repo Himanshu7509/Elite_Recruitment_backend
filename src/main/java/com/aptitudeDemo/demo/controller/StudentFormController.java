@@ -45,9 +45,8 @@ public class StudentFormController {
     public ResponseEntity<?> getStudentById(
             @PathVariable String studentFormId
     ) {
-
         return ResponseEntity.ok(
-                studentFormService.getByStudentFormId(studentFormId)
+                studentFormService.getStudentWithResume(studentFormId)
         );
     }
     
