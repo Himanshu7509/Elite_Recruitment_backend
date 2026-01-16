@@ -22,7 +22,7 @@ public class ResumeController {
 
     @Autowired
     private ResumeS3Service resumeS3Service;
-    
+   /* 
     @PostMapping("/{studentFormId}")
     public ResponseEntity<?> uploadResume(
             @PathVariable String studentFormId,
@@ -32,7 +32,7 @@ public class ResumeController {
         resumeS3Service.uploadAndSaveResume(file, studentFormId);
         return ResponseEntity.ok("Resume uploaded successfully");
     }
-
+*/
      @GetMapping("/{studentFormId}")
     public ResponseEntity<?> getResumeByStudentFormId(
             @PathVariable String studentFormId
@@ -48,7 +48,7 @@ public class ResumeController {
         return ResponseEntity.ok(resume);
     }
 
-    /*
+    
     @PostMapping("/upload/{email}")
     public ResponseEntity<?> uploadResume(
             @PathVariable String email,
@@ -60,7 +60,7 @@ public class ResumeController {
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
-
+/* 
      @GetMapping("/email/{email}")
     public ResponseEntity<Resume> getResumeByEmail(
             @PathVariable String email
