@@ -38,7 +38,12 @@ public class QuestionsController {
         service.create(studentFormId, request);
         return ResponseEntity.ok("Questions saved successfully");
     }
-/*
+    
+    @GetMapping("/{studentFormId}")
+    public ResponseEntity<?> getQuestionsByStudentFormId(@PathVariable String studentFormId) {
+        return ResponseEntity.ok(service.getByStudentFormId(studentFormId));
+    }
+    /*
     @PostMapping("/submit")
     public ResponseEntity<Questions> create(
             @RequestBody QuestionsRequest request) {
