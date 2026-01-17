@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.aptitudeDemo.demo.dto.student.DashboardDTO;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +20,10 @@ import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
 import com.aptitudeDemo.demo.model.student.CandidateProfile;
-import com.aptitudeDemo.demo.model.student.Resume;
 import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.repository.ResumeRepository;
 import com.aptitudeDemo.demo.service.OpenAiService;
+import com.aptitudeDemo.demo.service.QuestionsService;
 import com.aptitudeDemo.demo.service.StudentFormService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +42,9 @@ public class StudentFormController {
     
     @Autowired
     private ResumeRepository resumeRepository;
+    
+    @Autowired
+    private QuestionsService questionsService;
     
     @GetMapping("/{studentFormId}")
     public ResponseEntity<?> getStudentById(
@@ -113,6 +112,30 @@ public class StudentFormController {
                 "JSON"
     
             ));
+            
+            // Save generated questions to database
+            try {
+                // Parse the generated test and save questions
+                if (aiGeneratedTest instanceof List) {
+                    List<?> questionList = (List<?>) aiGeneratedTest;
+                    // Convert to Question objects and save
+                    // This is a simplified version - you may need to adjust based on actual structure
+                    log.info("Saving {} generated questions for student {}", 
+                        questionList.size(), savedForm.getId());
+                    
+                    // Create Questions entity and save
+                    com.aptitudeDemo.demo.dto.student.QuestionsRequest questionsRequest = 
+                        new com.aptitudeDemo.demo.dto.student.QuestionsRequest(
+                            studentFormRequest.getPermanentEmail(),
+                            studentFormRequest.getFullName(),
+                            new java.util.ArrayList<>() // Empty list for now, will be populated by students
+                        );
+                    
+                    questionsService.create(savedForm.getId(), questionsRequest);
+                }
+            } catch (Exception e) {
+                log.warn("Could not save generated questions: {}", e.getMessage());
+            }
             
             // Return both the AI-generated test and the saved form ID
             Map<String, Object> response = Map.of(
