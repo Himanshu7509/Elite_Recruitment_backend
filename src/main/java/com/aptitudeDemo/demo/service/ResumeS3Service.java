@@ -86,6 +86,13 @@ public class ResumeS3Service {
         resume.setUploadedAt(LocalDateTime.now());
         
         resumeRepository.save(resume);
+        
+        // Update the student form with resume information
+        studentFormRepository.findById(studentFormId).ifPresent(studentForm -> {
+            studentForm.setResumeId(resume.getId());
+            studentForm.setResumeUrl(resume.getResumeUrl());
+            studentFormRepository.save(studentForm);
+        });
 
     }
     
