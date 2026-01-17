@@ -1,15 +1,13 @@
 package com.aptitudeDemo.demo.service;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptitudeDemo.demo.model.student.Resume;
@@ -88,6 +86,10 @@ public class ResumeS3Service {
     public Resume getResumeByStudentFormId(String studentFormId) {
         return resumeRepository.findByStudentFormId(studentFormId)
                 .orElse(null);
+    }
+    
+    public List<Resume> getAllResumes() {
+        return resumeRepository.findAll();
     }
     
     private void validateStudentFormId(String studentFormId) {
