@@ -56,7 +56,7 @@ public class ResumeController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        resumeS3Service.uploadAndSaveResume(file, email);
+        resumeS3Service.uploadAndSaveResumeByEmail(file, email);
 
         return ResponseEntity.ok("Resume uploaded successfully");
     }
