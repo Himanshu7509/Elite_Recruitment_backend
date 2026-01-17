@@ -51,7 +51,8 @@ public class StudentFormController {
             @PathVariable String studentFormId
     ) {
         return ResponseEntity.ok(
-                studentFormService.getStudentWithResume(studentFormId)
+            studentFormService.getByStudentFormId(studentFormId)
+             //   studentFormService.getStudentWithResume(studentFormId)
         );
     }
     
