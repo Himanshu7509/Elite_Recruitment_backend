@@ -3,6 +3,7 @@ package com.aptitudeDemo.demo.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aptitudeDemo.demo.model.student.Resume;
+import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.repository.ResumeRepository;
+import com.aptitudeDemo.demo.repository.StudentFormRepository;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -30,6 +33,9 @@ public class ResumeS3Service {
 
     @Autowired
     private ResumeRepository resumeRepository;
+    
+    @Autowired
+    private StudentFormRepository studentFormRepository;
 
     private static final String RESUME_FOLDER = "AptitudeTest/resume/";
     
@@ -81,6 +87,23 @@ public class ResumeS3Service {
         
         resumeRepository.save(resume);
 
+    }
+    
+    public void uploadAndSaveResumeByEmail(MultipartFile file, String email) throws IOException {
+        // Find the actual student form ID by email
+        Optional<StudentForm> studentOpt = studentFormRepository.findByPermanentEmail(email.toLowerCase().trim());
+        
+        if (!studentOpt.isPresent()) {
+            throw new RuntimeException("Student with email " + email + " not found");
+        }
+        
+        // Assuming the student object has an 'id' field
+        // We need to get the actual StudentForm to extract the ID
+        StudentForm student = (StudentForm) studentOpt.get();
+        String studentFormId = student.getId();
+        
+        // Now upload using the actual student form ID
+        uploadAndSaveResume(file, studentFormId);
     }
     
     public Resume getResumeByStudentFormId(String studentFormId) {

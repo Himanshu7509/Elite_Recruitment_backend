@@ -143,6 +143,10 @@ public class StudentFormService {
     
 }   
     
+    public Optional<StudentForm> getStudentByEmail(String email) {
+        return studentFormRepository.findByPermanentEmail(email);
+    }
+    
     public StudentForm getStudentWithResume(String studentFormId) {
 
         log.info("Fetching student form WITH resume for ID: {}", studentFormId);
