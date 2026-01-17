@@ -3,11 +3,9 @@ package com.aptitudeDemo.demo.controller.openai;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +41,11 @@ public class QuestionsController {
     public ResponseEntity<?> getQuestionsByStudentFormId(@PathVariable String studentFormId) {
         return ResponseEntity.ok(service.getByStudentFormId(studentFormId));
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Questions>> getAll() {
+        return ResponseEntity.ok(service.getAll());
+    }
     /*
     @PostMapping("/submit")
     public ResponseEntity<Questions> create(
@@ -50,10 +53,7 @@ public class QuestionsController {
         return ResponseEntity.ok(service.create(request));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Questions>> getAll() {
-        return ResponseEntity.ok(service.getAll());
-    }
+    
 
     @GetMapping("/question/{id}")
     public ResponseEntity<Questions> getById(@PathVariable String id) {
