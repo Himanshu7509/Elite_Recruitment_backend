@@ -151,12 +151,9 @@ public class StudentFormService {
                 .findById(studentFormId)
                 .orElseThrow(() -> new RuntimeException("StudentForm not found"));
 
-        Resume resume = resumeRepository
-                .findByStudentFormId(studentFormId)
-                .orElse(null);
-
-        studentForm.setResume(resume); // populate transient field
-
+        // Resume data is now stored directly in the StudentForm
+        // The resume information is already available in resumeId and resumeUrl fields
+        
         return studentForm;
     }
     private List<EducationRecord> convertEducationRecords(List<EducationRecordDto> educationRecordDtos) {

@@ -3,7 +3,6 @@ package com.aptitudeDemo.demo.model.student;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -52,7 +51,7 @@ public class StudentForm {
     private List<String> primarySkills;
     private List<String> secondarySkills;
     
-    @Transient
-    private Resume resume;
+    private String resumeId;
+    private String resumeUrl;
 
 }

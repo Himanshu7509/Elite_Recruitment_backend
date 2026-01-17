@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.aptitudeDemo.demo.dto.student.DashboardDTO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,9 @@ import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
 import com.aptitudeDemo.demo.model.student.CandidateProfile;
+import com.aptitudeDemo.demo.model.student.Resume;
 import com.aptitudeDemo.demo.model.student.StudentForm;
+import com.aptitudeDemo.demo.repository.ResumeRepository;
 import com.aptitudeDemo.demo.service.OpenAiService;
 import com.aptitudeDemo.demo.service.StudentFormService;
 
@@ -40,6 +43,9 @@ public class StudentFormController {
 
     @Autowired
     private StudentFormService studentFormService;
+    
+    @Autowired
+    private ResumeRepository resumeRepository;
     
     @GetMapping("/{studentFormId}")
     public ResponseEntity<?> getStudentById(
