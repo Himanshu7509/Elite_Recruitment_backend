@@ -1,6 +1,7 @@
 package com.aptitudeDemo.demo.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,12 @@ public class ResumeController {
         resumeS3Service.uploadAndSaveResume(file, email);
 
         return ResponseEntity.ok("Resume uploaded successfully");
+    }
+    
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllResumes() {
+        List<Resume> resumes = resumeS3Service.getAllResumes();
+        return ResponseEntity.ok(resumes);
     }
 
 }
