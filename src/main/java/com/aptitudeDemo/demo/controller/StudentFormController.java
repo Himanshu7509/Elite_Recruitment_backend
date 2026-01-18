@@ -116,26 +116,53 @@ public class StudentFormController {
             
             // Save generated questions to database
             try {
-                // Parse the generated test and save questions
-                if (aiGeneratedTest instanceof List) {
-                    List<?> questionList = (List<?>) aiGeneratedTest;
-                    // Convert to Question objects and save
-                    // This is a simplified version - you may need to adjust based on actual structure
-                    log.info("Saving {} generated questions for student {}", 
-                        questionList.size(), savedForm.getId());
+                java.util.List<com.aptitudeDemo.demo.model.OpenAI.Question> questionsList = new java.util.ArrayList<>();
+                
+                // Parse the AI-generated test into Question objects
+                if (aiGeneratedTest instanceof java.util.List) {
+                    java.util.List<?> rawQuestions = (java.util.List<?>) aiGeneratedTest;
                     
-                    // Create Questions entity and save
-                    com.aptitudeDemo.demo.dto.student.QuestionsRequest questionsRequest = 
-                        new com.aptitudeDemo.demo.dto.student.QuestionsRequest(
-                            studentFormRequest.getPermanentEmail(),
-                            studentFormRequest.getFullName(),
-                            new java.util.ArrayList<>() // Empty list for now, will be populated by students
-                        );
-                    
-                    questionsService.create(savedForm.getId(), questionsRequest);
+                    for (Object rawQuestionObj : rawQuestions) {
+                        if (rawQuestionObj instanceof Map) {
+                            Map<String, Object> rawQuestion = (Map<String, Object>) rawQuestionObj;
+                            
+                            String aiQuestion = rawQuestion.getOrDefault("question", "").toString();
+                            Object optionsObj = rawQuestion.get("options");
+                            java.util.List<String> options = new java.util.ArrayList<>();
+                            if (optionsObj instanceof java.util.List) {
+                                for (Object option : (java.util.List<?>) optionsObj) {
+                                    options.add(option.toString());
+                                }
+                            }
+                            String aiAnswer = rawQuestion.getOrDefault("correctAnswer", "").toString();
+                            
+                            com.aptitudeDemo.demo.model.OpenAI.Question question = 
+                                new com.aptitudeDemo.demo.model.OpenAI.Question();
+                            question.setAiQuestion(aiQuestion);
+                            question.setOptions(options);
+                            question.setAiAnswer(aiAnswer);
+                            question.setUserAnswer(""); // Initially empty, to be filled by student
+                            
+                            questionsList.add(question);
+                        }
+                    }
                 }
+                
+                log.info("Parsed {} questions from AI response", questionsList.size());
+                
+                // Create Questions entity and save
+                com.aptitudeDemo.demo.dto.student.QuestionsRequest questionsRequest = 
+                    new com.aptitudeDemo.demo.dto.student.QuestionsRequest(
+                        studentFormRequest.getPermanentEmail(),
+                        studentFormRequest.getFullName(),
+                        questionsList
+                    );
+                
+                questionsService.create(savedForm.getId(), questionsRequest);
+                
             } catch (Exception e) {
                 log.warn("Could not save generated questions: {}", e.getMessage());
+                e.printStackTrace();
             }
             
             // Return both the AI-generated test and the saved form ID
