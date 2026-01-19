@@ -1,5 +1,6 @@
 package com.aptitudeDemo.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aptitudeDemo.demo.dto.student.QuestionsRequest;
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
 import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
+import com.aptitudeDemo.demo.model.OpenAI.Question;
 import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
@@ -118,7 +120,7 @@ public class StudentFormController {
             
             // Save generated questions to database
             try {
-                java.util.List<com.aptitudeDemo.demo.model.OpenAI.Question> questionsList = new java.util.ArrayList<>();
+                List<Question> questionsList = new ArrayList<>();
                 
                 // Parse the AI-generated test into Question objects
                 if (aiGeneratedTest instanceof java.util.List) {
