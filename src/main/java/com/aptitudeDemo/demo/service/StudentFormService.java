@@ -13,17 +13,13 @@ import com.aptitudeDemo.demo.dto.student.StudentProfileResponse;
 import com.aptitudeDemo.demo.dto.student.WorkExperienceDto;
 import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.model.student.EducationRecord;
-import com.aptitudeDemo.demo.model.student.Feedback;
-import com.aptitudeDemo.demo.model.student.Result;
-import com.aptitudeDemo.demo.model.student.Resume;
 import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.model.student.WorkExperience;
-import com.aptitudeDemo.demo.repository.StudentFormRepository;
 import com.aptitudeDemo.demo.repository.FeedbackRepository;
+import com.aptitudeDemo.demo.repository.QuestionsRepository;
 import com.aptitudeDemo.demo.repository.ResultRepository;
 import com.aptitudeDemo.demo.repository.ResumeRepository;
-import com.aptitudeDemo.demo.repository.QuestionsRepository;
-
+import com.aptitudeDemo.demo.repository.StudentFormRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -133,12 +129,27 @@ public class StudentFormService {
                 .findById(studentFormId)
                 .orElseThrow(() -> new RuntimeException("StudentForm not found"));
 
+        // Debug: Log questions data
+        Questions questions = 
+            questionsRepository.findByStudentFormId(studentFormId).orElse(null);
+        
+        if (questions != null && questions.getQuestions() != null) {
+            log.info("Found {} questions for student {}", questions.getQuestions().size(), studentFormId);
+            for (int i = 0; i < Math.min(3, questions.getQuestions().size()); i++) {
+                com.aptitudeDemo.demo.model.OpenAI.Question q = questions.getQuestions().get(i);
+                log.info("Question {}: userAnswer = '{}', aiAnswer = '{}'", 
+                    i+1, q.getUserAnswer(), q.getAiAnswer());
+            }
+        } else {
+            log.info("No questions found for student {}", studentFormId);
+        }
+
     return new StudentProfileResponse(
             studentForm,
             feedbackRepository.findByStudentFormId(studentFormId).orElse(null),
             resultRepository.findByStudentFormId(studentFormId).orElse(null),
             resumeRepository.findByStudentFormId(studentFormId).orElse(null),
-            questionsRepository.findByStudentFormId(studentFormId).orElse(null)
+            questions
     );
     
 }   
