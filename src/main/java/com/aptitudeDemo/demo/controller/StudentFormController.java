@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aptitudeDemo.demo.dto.student.QuestionsRequest;
 import com.aptitudeDemo.demo.dto.student.StudentFormRequest;
 import com.aptitudeDemo.demo.model.OpenAI.DifficultyDistribution;
+import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequest;
 import com.aptitudeDemo.demo.model.OpenAI.TestRequirements;
 import com.aptitudeDemo.demo.model.student.CandidateProfile;
@@ -149,16 +151,19 @@ public class StudentFormController {
                 }
                 
                 log.info("Parsed {} questions from AI response", questionsList.size());
+                log.info("Using studentFormId for questions: {}", savedForm.getId());
                 
                 // Create Questions entity and save
-                com.aptitudeDemo.demo.dto.student.QuestionsRequest questionsRequest = 
+              QuestionsRequest questionsRequest = 
                     new com.aptitudeDemo.demo.dto.student.QuestionsRequest(
                         studentFormRequest.getPermanentEmail(),
                         studentFormRequest.getFullName(),
                         questionsList
                     );
                 
-                questionsService.create(savedForm.getId(), questionsRequest);
+                Questions createdQuestions = questionsService.create(savedForm.getId(), questionsRequest);
+                log.info("Questions created with ID: {} and studentFormId: {}", 
+                    createdQuestions.getId(), createdQuestions.getStudentFormId());
                 
             } catch (Exception e) {
                 log.warn("Could not save generated questions: {}", e.getMessage());
@@ -175,7 +180,6 @@ public class StudentFormController {
             return ResponseEntity.ok(response);
 
             } catch (IllegalStateException e) {
-        // ✅ Duplicate email case
         log.warn("Duplicate email submission blocked: {}", studentFormRequest.getPermanentEmail());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
