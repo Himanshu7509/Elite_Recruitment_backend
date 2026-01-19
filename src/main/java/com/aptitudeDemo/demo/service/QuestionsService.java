@@ -24,6 +24,8 @@ public class QuestionsService {
     	// Validate that studentFormId is a proper MongoDB ObjectId format
     	if (!isValidMongoId(studentFormId)) {
     	    log.warn("Invalid studentFormId format detected: {}. Expected MongoDB ObjectId format.", studentFormId);
+    	    // Throw exception to prevent saving with wrong format
+    	    throw new IllegalArgumentException("Invalid studentFormId format: " + studentFormId + ". Expected MongoDB ObjectId format.");
     	}
     	
     	repository.findByStudentFormId(studentFormId)
