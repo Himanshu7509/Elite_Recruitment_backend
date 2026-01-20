@@ -125,9 +125,23 @@ public class StudentFormService {
 
         log.info("Fetching complete profile for studentFormId: {}", studentFormId);
 
-        StudentForm studentForm = studentFormRepository
-                .findById(studentFormId)
-                .orElseThrow(() -> new RuntimeException("StudentForm not found"));
+        // Check if student form exists
+        Optional<StudentForm> studentFormOpt = studentFormRepository.findById(studentFormId);
+        StudentForm studentForm;
+        
+        if (studentFormOpt.isPresent()) {
+            studentForm = studentFormOpt.get();
+        } else {
+            log.warn("StudentForm not found for ID: {}", studentFormId);
+            // Create a minimal response with available data
+            return new StudentProfileResponse(
+                null, // StudentForm doesn't exist
+                feedbackRepository.findByStudentFormId(studentFormId).orElse(null),
+                resultRepository.findByStudentFormId(studentFormId).orElse(null),
+                resumeRepository.findByStudentFormId(studentFormId).orElse(null),
+                questionsRepository.findByStudentFormId(studentFormId).orElse(null)
+            );
+        }
 
         // Debug: Log questions data
         Questions questions = 
