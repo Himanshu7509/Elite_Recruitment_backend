@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,17 @@ public class FeedbackController {
                     .body("feedback not found for studentFormId: " + studentFormId);
         }
         return ResponseEntity.ok(feedback);
+    }
+    
+    @DeleteMapping("/{studentFormId}")
+    public ResponseEntity<?> deleteFeedback(@PathVariable String studentFormId) {
+        try {
+            feedbackService.deleteFeedbackByStudentFormId(studentFormId);
+            return ResponseEntity.ok("Feedback deleted successfully for studentFormId: " + studentFormId);
+        } catch (Exception e) {
+            log.error("Error deleting feedback for studentFormId: {}: {}", studentFormId, e.getMessage());
+            return ResponseEntity.status(500).body("Error deleting feedback: " + e.getMessage());
+        }
     }
     
     /*
