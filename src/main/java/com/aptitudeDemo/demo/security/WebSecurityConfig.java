@@ -30,6 +30,7 @@ public class WebSecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.GET, "/auth/student/**").permitAll()
                 .requestMatchers(
                     "/auth/**",
                     "/open/generate",
@@ -41,8 +42,7 @@ public class WebSecurityConfig {
                     "/email-verification/**",
                     "/admin/email/**",
                     "/resume/**",
-                    "/student/**",
-                    "/auth/student/**"
+                    "/student/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
