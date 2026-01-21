@@ -35,7 +35,6 @@ EXPOSE 8080
 
 # Environment variables (can be overridden at runtime)
 ENV MONGODB_URI=""
-ENV JWT_SECRET="defaultSecretKey123"
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
