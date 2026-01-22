@@ -65,10 +65,7 @@ public class WebSecurityConfig {
             "http://localhost:*",
             "https://elite-apptitude-test-fswdxsy4b-purvanshu-khapres-projects.vercel.app",
             "https://elite-apptitude-test.vercel.app",
-            "https://unperpetuating-may-eely.ngrok-free.dev",
-            "https://*.vercel.app",  // Wildcard for Vercel deployments
-            "https://*.ngrok.io",    // Wildcard for ngrok tunnels
-            "https://*.ngrok-free.dev" // Wildcard for ngrok free tunnels
+            "https://unperpetuating-may-eely.ngrok-free.dev"
         ));
 
         config.setAllowedMethods(List.of(
