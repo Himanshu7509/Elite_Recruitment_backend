@@ -139,10 +139,9 @@ public class ImageS3Service {
         if (!List.of(
                 "image/jpeg",
                 "image/png",
-                "image/gif",
                 "image/webp"
         ).contains(file.getContentType())) {
-            throw new RuntimeException("Only JPG, PNG, GIF, WEBP images allowed");
+            throw new RuntimeException("Only JPG, PNG, WEBP images allowed");
         }
     }
 
