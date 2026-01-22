@@ -60,7 +60,7 @@ public class StudentForm {
     private String resumeUrl;
     
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("createdAt")
     private LocalDateTime createdAt;
     
