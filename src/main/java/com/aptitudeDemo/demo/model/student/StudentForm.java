@@ -59,6 +59,9 @@ public class StudentForm {
     private String resumeId;
     private String resumeUrl;
     
+    private String imageId;
+    private String imageUrl;
+    
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("createdAt")
