@@ -1,9 +1,14 @@
 package com.aptitudeDemo.demo.model.student;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,5 +58,12 @@ public class StudentForm {
     
     private String resumeId;
     private String resumeUrl;
+    
+    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("createdAt")
+    private LocalDateTime createdAt;
+    
+    
 
 }
