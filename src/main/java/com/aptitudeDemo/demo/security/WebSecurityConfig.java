@@ -47,7 +47,8 @@ public class WebSecurityConfig {
                     "/email-verification/**",
                     "/admin/email/**",
                     "/resume/**",
-                    "/student/**"
+                    "/student/**",
+                    "/image/**"
                 ).permitAll()
 
                 .anyRequest().authenticated()
