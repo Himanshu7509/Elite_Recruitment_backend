@@ -58,7 +58,7 @@ public class StudentForm {
     
     private String resumeId;
     private String resumeUrl;
-    private Integer correctAnswer;
+   // private Integer correctAnswer;
     
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd")
