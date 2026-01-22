@@ -63,7 +63,7 @@ public class StudentForm {
     private String imageUrl;
     
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Kolkata")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("createdAt")
     private LocalDateTime createdAt;
     
