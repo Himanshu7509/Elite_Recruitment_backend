@@ -1,5 +1,6 @@
 package com.aptitudeDemo.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import com.aptitudeDemo.demo.dto.student.StudentProfileResponse;
 import com.aptitudeDemo.demo.dto.student.WorkExperienceDto;
 import com.aptitudeDemo.demo.model.OpenAI.Questions;
 import com.aptitudeDemo.demo.model.student.EducationRecord;
+import com.aptitudeDemo.demo.model.student.Result;
 import com.aptitudeDemo.demo.model.student.StudentForm;
 import com.aptitudeDemo.demo.model.student.WorkExperience;
 import com.aptitudeDemo.demo.repository.FeedbackRepository;
@@ -96,7 +98,24 @@ public class StudentFormService {
     
     public List<StudentForm> getAllStudents() {
         log.info("Fetching all student forms");
-        return studentFormRepository.findAll();
+        List<StudentForm> students = studentFormRepository.findAll();
+        
+        // Populate correctAnswer from Result for each student
+        for (StudentForm student : students) {
+            Optional<Result> resultOpt = resultRepository.findByStudentFormId(student.getId());
+            if (resultOpt.isPresent()) {
+                student.setCorrectAnswer(resultOpt.get().getCorrectAnswer());
+            } else {
+                student.setCorrectAnswer(null); // or 0 if you prefer a default value
+            }
+            
+            // Ensure createdAt is not null for existing records
+            if (student.getCreatedAt() == null) {
+                student.setCreatedAt(LocalDateTime.now());
+            }
+        }
+        
+        return students;
     }
     
     public Optional<StudentForm> getStudentByName(String fullName) {
